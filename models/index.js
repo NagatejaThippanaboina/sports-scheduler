@@ -28,6 +28,7 @@ if (config.use_env_variable) {
     );
 }
 
+// Load all models
 fs.readdirSync(__dirname)
     .filter((file) => {
         return (
@@ -46,12 +47,54 @@ fs.readdirSync(__dirname)
         db[model.name] = model;
     });
 
-Object.keys(db).forEach((modelName) => {
-    if (db[modelName].associate) {
-        db[modelName].associate(db);
-    }
+// ===============================
+// MODEL RELATIONSHIPS
+// ===============================
+
+// User -> Sports
+db.User.hasMany(db.Sport, {
+    foreignKey: "createdBy",
 });
 
+db.Sport.belongsTo(db.User, {
+    foreignKey: "createdBy",
+});
+
+// User -> Sessions
+db.User.hasMany(db.Session, {
+    foreignKey: "createdBy",
+});
+
+db.Session.belongsTo(db.User, {
+    foreignKey: "createdBy",
+});
+
+// Sport -> Sessions
+db.Sport.hasMany(db.Session, {
+    foreignKey: "sportId",
+});
+
+db.Session.belongsTo(db.Sport, {
+    foreignKey: "sportId",
+});
+
+db.Session.hasMany(db.SessionParticipant, {
+    foreignKey: "sessionId",
+});
+
+db.SessionParticipant.belongsTo(db.Session, {
+    foreignKey: "sessionId",
+});
+
+db.User.hasMany(db.SessionParticipant, {
+    foreignKey: "userId",
+});
+
+db.SessionParticipant.belongsTo(db.User, {
+    foreignKey: "userId",
+});
+
+// Sequelize instance
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

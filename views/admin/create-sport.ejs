@@ -11,34 +11,136 @@
 
 <body>
 
-    <main>
+<div class="page">
 
-        <h1>Create a Sport</h1>
+    <!-- =========================
+         NAVIGATION
+         ========================= -->
 
-        <p>Add a sport that players can schedule.</p>
+    <header class="topbar">
 
-        <form action="/admin/sports" method="POST">
+        <div class="container topbar-inner">
 
-            <input
-                type="text"
-                name="name"
-                placeholder="Sport name"
-                required
+            <a
+                href="/admin/dashboard"
+                class="brand"
             >
 
-            <button type="submit">
-                Create Sport
-            </button>
+                <div class="brand-mark">
+                    S
+                </div>
 
-        </form>
+                <div class="brand-text">
 
-        <p>
-            <a href="/admin/dashboard">
-                ← Back to Dashboard
+                    <span class="brand-name">
+                        Sports Scheduler
+                    </span>
+
+                    <span class="brand-subtitle">
+                        Admin Console
+                    </span>
+
+                </div>
+
             </a>
-        </p>
+
+            <a
+                href="/admin/dashboard"
+                class="btn btn-secondary btn-small"
+            >
+                &larr; Dashboard
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         FORM
+         ========================= -->
+
+    <main class="container form-page">
+
+        <div class="form-card">
+
+            <div class="form-header">
+
+                <p class="eyebrow">
+                    Sports Management
+                </p>
+
+                <h1>
+                    Create a Sport
+                </h1>
+
+                <p>
+                    Add a sport that players can use when creating
+                    and joining sessions.
+                </p>
+
+            </div>
+
+
+            <form
+                action="/admin/sports"
+                method="POST"
+            >
+
+                <div class="form-group">
+
+                    <label
+                        for="name"
+                        class="form-label"
+                    >
+                        Sport Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        class="form-control"
+                        placeholder="Example: Basketball"
+                        required
+                    >
+
+                    <span class="form-help">
+                        Use a clear name that players will recognize.
+                    </span>
+
+                </div>
+
+
+                <div class="form-actions">
+
+                    <a
+                        href="/admin/dashboard"
+                        class="btn btn-secondary"
+                    >
+                        Cancel
+                    </a>
+
+                    <div class="form-actions-right">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Create Sport
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </main>
+
+</div>
 
 </body>
 </html>

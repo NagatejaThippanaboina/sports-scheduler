@@ -2,44 +2,183 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Sign Up | Sports Scheduler</title>
+
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-    <main>
-        <h1>Create Account</h1>
 
-        <form action="/signup" method="POST">
-            <input
-                type="text"
-                name="name"
-                placeholder="Your name"
-                required
-            >
+    <div class="page">
 
-            <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                required
-            >
+        <!-- TOP NAVIGATION -->
+        <header class="topbar">
+            <div class="container topbar-inner">
 
-            <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                required
-            >
+                <a href="/" class="brand">
 
-            <button type="submit">Create Account</button>
-        </form>
+                    <div class="brand-mark">
+                        S
+                    </div>
 
-        <p>
-            Already have an account?
-            <a href="/login">Login</a>
-        </p>
-    </main>
+                    <div class="brand-text">
+                        <span class="brand-name">
+                            Sports Scheduler
+                        </span>
+
+                        <span class="brand-tagline">
+                            Plan. Play. Connect.
+                        </span>
+                    </div>
+
+                </a>
+
+            </div>
+        </header>
+
+
+        <!-- SIGN UP -->
+        <main class="auth-page">
+
+            <section class="auth-form-panel">
+
+                <div class="auth-form-wrapper">
+
+                    <div class="auth-form-top">
+
+                        <span class="auth-eyebrow">
+                            SPORTS SCHEDULER
+                        </span>
+
+                        <h1>
+                            Create your account
+                        </h1>
+
+                        <p>
+                            Join your sports community and start playing.
+                        </p>
+
+                    </div>
+
+
+                    <div class="auth-form-card">
+
+                        <form
+                            action="/signup"
+                            method="POST"
+                            class="auth-form"
+                        >
+
+                            <!-- NAME -->
+                            <div class="form-group">
+
+                                <label
+                                    for="name"
+                                    class="form-label"
+                                >
+                                    Full name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    class="form-control"
+                                    placeholder="Enter your full name"
+                                    autocomplete="name"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- EMAIL -->
+                            <div class="form-group">
+
+                                <label
+                                    for="email"
+                                    class="form-label"
+                                >
+                                    Email address
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    class="form-control"
+                                    placeholder="Enter your email"
+                                    autocomplete="email"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <!-- PASSWORD -->
+                            <div class="form-group">
+
+                                <label
+                                    for="password"
+                                    class="form-label"
+                                >
+                                    Password
+                                </label>
+
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    class="form-control"
+                                    placeholder="Create a password"
+                                    autocomplete="new-password"
+                                    required
+                                >
+
+                                <span class="form-help">
+                                    Choose a password you can remember.
+                                </span>
+
+                            </div>
+
+
+                            <!-- SUBMIT -->
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-block"
+                            >
+                                Create Account
+                            </button>
+
+                        </form>
+
+
+                        <!-- LOGIN LINK -->
+                        <div class="auth-footer">
+
+                            <p>
+                                Already have an account?
+                                <a href="/login">
+                                    Sign in
+                                </a>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
 </body>
 </html>

@@ -2,37 +2,150 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Login | Sports Scheduler</title>
+
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-    <main>
-        <h1>Welcome Back</h1>
 
-        <form action="/login" method="POST">
-            <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                required
-            >
+    <div class="page">
 
-            <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                required
-            >
+        <header class="topbar">
+            <div class="container topbar-inner">
 
-            <button type="submit">Login</button>
-        </form>
+                <a href="/" class="brand">
 
-        <p>
-            Don't have an account?
-            <a href="/signup">Sign Up</a>
-        </p>
-    </main>
+                    <div class="brand-mark">
+                        S
+                    </div>
+
+                    <div class="brand-text">
+                        <span class="brand-name">
+                            Sports Scheduler
+                        </span>
+
+                        <span class="brand-tagline">
+                            Plan. Play. Connect.
+                        </span>
+                    </div>
+
+                </a>
+
+            </div>
+        </header>
+
+
+        <main class="auth-page">
+
+            <section class="auth-form-panel">
+
+                <div class="auth-form-wrapper">
+
+                    <div class="auth-form-top">
+
+                        <span class="auth-eyebrow">
+                            SPORTS SCHEDULER
+                        </span>
+
+                        <h1>
+                            Welcome back
+                        </h1>
+
+                        <p>
+                            Sign in to manage your games and sessions.
+                        </p>
+
+                    </div>
+
+
+                    <div class="auth-form-card">
+
+                        <form
+                            action="/login"
+                            method="POST"
+                            class="auth-form"
+                        >
+
+                            <div class="form-group">
+
+                                <label
+                                    for="email"
+                                    class="form-label"
+                                >
+                                    Email
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    class="form-control"
+                                    placeholder="Enter your email"
+                                    autocomplete="email"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label
+                                    for="password"
+                                    class="form-label"
+                                >
+                                    Password
+                                </label>
+
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    class="form-control"
+                                    placeholder="Enter your password"
+                                    autocomplete="current-password"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary btn-block"
+                            >
+                                Sign In
+                            </button>
+
+                        </form>
+
+
+                        <div class="auth-footer">
+
+                            <p>
+                                Don't have an account?
+                                <a href="/signup">
+                                    Create one
+                                </a>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
 </body>
 </html>

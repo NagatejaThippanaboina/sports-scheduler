@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Create Account | Sports Scheduler</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="auth-page">
+
+    <!-- =========================
+         BRAND PANEL
+         ========================= -->
+
+    <section class="auth-brand-panel">
+
+        <div class="auth-brand-content">
+
+            <div class="auth-brand-logo">
+                S
+            </div>
+
+            <h1>
+                Bring your
+                <br>
+                game together.
+            </h1>
+
+            <p>
+                Create your Sports Scheduler account and start
+                organizing games with the people you play with.
+            </p>
+
+
+            <div class="auth-features">
+
+                <div class="auth-feature">
+
+                    <div class="auth-feature-icon">
+                        🏟️
+                    </div>
+
+                    <span>
+                        Create your own sessions
+                    </span>
+
+                </div>
+
+
+                <div class="auth-feature">
+
+                    <div class="auth-feature-icon">
+                        👋
+                    </div>
+
+                    <span>
+                        Join sessions with others
+                    </span>
+
+                </div>
+
+
+                <div class="auth-feature">
+
+                    <div class="auth-feature-icon">
+                        ⚡
+                    </div>
+
+                    <span>
+                        Keep every game organized
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         SIGNUP FORM
+         ========================= -->
+
+    <section class="auth-form-panel">
+
+        <div class="auth-form-wrapper">
+
+            <a
+                href="/"
+                class="auth-back"
+            >
+                &larr; Back to home
+            </a>
+
+
+            <div class="auth-form-top">
+
+                <p class="eyebrow">
+                    Get Started
+                </p>
+
+                <h2>
+                    Create your account
+                </h2>
+
+                <p>
+                    Join Sports Scheduler and start planning your
+                    next game.
+                </p>
+
+            </div>
+
+
+            <div class="auth-form-card">
+
+                <form
+                    action="/signup"
+                    method="POST"
+                    class="auth-form"
+                >
+
+                    <div class="form-group">
+
+                        <label
+                            for="name"
+                            class="form-label"
+                        >
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            class="form-control"
+                            placeholder="Your name"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            for="email"
+                            class="form-label"
+                        >
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-control"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            for="password"
+                            class="form-label"
+                        >
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control"
+                            placeholder="Create a password"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <span class="form-help">
+                            Choose a password you can remember securely.
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary auth-submit"
+                    >
+                        Create Account
+                    </button>
+
+                </form>
+
+
+                <p class="auth-switch">
+
+                    Already have an account?
+
+                    <a href="/login">
+                        Sign in
+                    </a>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+</html>

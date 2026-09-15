@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Session | Sports Scheduler</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- =========================
+         NAVIGATION
+         ========================= -->
+
+    <header class="topbar">
+
+        <div class="container topbar-inner">
+
+            <a href="/admin/dashboard" class="brand">
+
+                <div class="brand-mark">
+                    S
+                </div>
+
+                <div class="brand-text">
+
+                    <span class="brand-name">
+                        Sports Scheduler
+                    </span>
+
+                    <span class="brand-subtitle">
+                        Admin Console
+                    </span>
+
+                </div>
+
+            </a>
+
+            <a
+                href="/admin/dashboard"
+                class="btn btn-secondary btn-small"
+            >
+                &larr; Dashboard
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         FORM
+         ========================= -->
+
+    <main class="container form-page">
+
+        <div class="form-card">
+
+            <div class="form-header">
+
+                <p class="eyebrow">
+                    New Session
+                </p>
+
+                <h1>
+                    Create a Sports Session
+                </h1>
+
+                <p>
+                    Set up your game, choose the teams, and let players
+                    know when and where to play.
+                </p>
+
+            </div>
+
+
+            <form
+                action="/admin/sessions"
+                method="POST"
+            >
+
+                <div class="form-grid">
+
+
+                    <!-- SPORT -->
+
+                    <div class="form-group">
+
+                        <label
+                            for="sportId"
+                            class="form-label"
+                        >
+                            Sport
+                        </label>
+
+                        <select
+                            id="sportId"
+                            name="sportId"
+                            class="form-control"
+                            required
+                        >
+
+                            <option value="">
+                                Select a sport
+                            </option>
+
+                            <% sports.forEach((sport) => { %>
+
+                                <option value="<%= sport.id %>">
+                                    <%= sport.name %>
+                                </option>
+
+                            <% }); %>
+
+                        </select>
+
+                        <span class="form-help">
+                            Choose one of your available sports.
+                        </span>
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="form-group">
+
+                        <label
+                            for="sessionDate"
+                            class="form-label"
+                        >
+                            Date & Time
+                        </label>
+
+                        <input
+                            type="datetime-local"
+                            id="sessionDate"
+                            name="sessionDate"
+                            class="form-control"
+                            required
+                        >
+
+                        <span class="form-help">
+                            Choose when the session will take place.
+                        </span>
+
+                    </div>
+
+
+                    <!-- VENUE -->
+
+                    <div class="form-group form-group-full">
+
+                        <label
+                            for="venue"
+                            class="form-label"
+                        >
+                            Venue
+                        </label>
+
+                        <input
+                            type="text"
+                            id="venue"
+                            name="venue"
+                            class="form-control"
+                            placeholder="Example: College Ground"
+                            required
+                        >
+
+                        <span class="form-help">
+                            Enter the location where players should meet.
+                        </span>
+
+                    </div>
+
+
+                    <!-- TEAM ONE -->
+
+                    <div class="form-group">
+
+                        <label
+                            for="teamOnePlayers"
+                            class="form-label"
+                        >
+                            Team 1 Players
+                        </label>
+
+                        <textarea
+                            id="teamOnePlayers"
+                            name="teamOnePlayers"
+                            class="form-control"
+                            placeholder="Rahul, Arjun, Priya"
+                        ></textarea>
+
+                        <span class="form-help">
+                            Enter existing player names separated by commas.
+                        </span>
+
+                    </div>
+
+
+                    <!-- TEAM TWO -->
+
+                    <div class="form-group">
+
+                        <label
+                            for="teamTwoPlayers"
+                            class="form-label"
+                        >
+                            Team 2 Players
+                        </label>
+
+                        <textarea
+                            id="teamTwoPlayers"
+                            name="teamTwoPlayers"
+                            class="form-control"
+                            placeholder="Anjali, Kiran, Rohit"
+                        ></textarea>
+
+                        <span class="form-help">
+                            Enter existing player names separated by commas.
+                        </span>
+
+                    </div>
+
+
+                    <!-- ADDITIONAL PLAYERS -->
+
+                    <div class="form-group">
+
+                        <label
+                            for="additionalPlayersNeeded"
+                            class="form-label"
+                        >
+                            Additional Players Needed
+                        </label>
+
+                        <input
+                            type="number"
+                            id="additionalPlayersNeeded"
+                            name="additionalPlayersNeeded"
+                            class="form-control"
+                            min="0"
+                            value="0"
+                            required
+                        >
+
+                        <span class="form-help">
+                            Number of open player slots.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FORM ACTIONS -->
+
+                <div class="form-actions">
+
+                    <a
+                        href="/admin/dashboard"
+                        class="btn btn-secondary"
+                    >
+                        Cancel
+                    </a>
+
+                    <div class="form-actions-right">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Create Session
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
