@@ -12,32 +12,19 @@ const { requireAuth } = require("../middleware/auth");
 const router = express.Router();
 
 
-// VIEW SESSION DETAILS
-router.get("/sessions/:id", requireAuth, async (req, res) => {
+// =========================================================
+// CREATE SESSION PAGE
+// =========================================================
+
+router.get("/sessions/new", requireAuth, async (req, res) => {
     try {
-        const session = await Session.findByPk(req.params.id, {
-            include: [
-                {
-                    model: Sport,
-                },
-                {
-                    model: SessionParticipant,
-                    include: [
-                        {
-                            model: User,
-                        },
-                    ],
-                },
-            ],
+        const sports = await Sport.findAll({
+            order: [["name", "ASC"]],
         });
 
-        if (!session) {
-            return res.status(404).send("Session not found.");
-        }
-
-        res.render("player/session-details", {
-            session,
+        res.render("player/create-session", {
             user: req.user,
+            sports,
         });
     } catch (error) {
         console.error(error);
@@ -45,79 +32,415 @@ router.get("/sessions/:id", requireAuth, async (req, res) => {
     }
 });
 
-// JOIN SESSION
-router.post("/sessions/:id/join", requireAuth, async (req, res) => {
+
+// =========================================================
+// CREATE SESSION
+// =========================================================
+
+router.post("/sessions", requireAuth, async (req, res) => {
     try {
-        const session = await Session.findByPk(req.params.id);
+        const {
+            sportId,
+            sessionDate,
+            venue,
+            teamOnePlayers,
+            teamTwoPlayers,
+            additionalPlayersNeeded,
+            creatorParticipating,
+        } = req.body;
 
-        if (!session) {
-            req.flash("error", "This session could not be found.");
-            return res.redirect("/dashboard");
-        }
 
-        if (session.status !== "scheduled") {
-            req.flash("error", "This session is no longer available.");
-            return res.redirect("/dashboard");
-        }
+        // ---------------------------------------------
+        // REQUIRED FIELD VALIDATION
+        // ---------------------------------------------
 
-        if (new Date(session.sessionDate) <= new Date()) {
+        if (
+            !sportId ||
+            !sessionDate ||
+            !venue ||
+            additionalPlayersNeeded === undefined ||
+            additionalPlayersNeeded === ""
+        ) {
             req.flash(
                 "error",
-                "This session has already started. You can no longer join it."
+                "Please fill in all required fields."
             );
-            return res.redirect("/dashboard");
+
+            return res.redirect("/sessions/new");
         }
 
-        const existingParticipant = await SessionParticipant.findOne({
-            where: {
+
+        // ---------------------------------------------
+        // CHECK SPORT
+        // ---------------------------------------------
+
+        const sport = await Sport.findByPk(sportId);
+
+        if (!sport) {
+            req.flash(
+                "error",
+                "Please select a valid sport."
+            );
+
+            return res.redirect("/sessions/new");
+        }
+
+
+        // ---------------------------------------------
+        // VALIDATE PLAYERS NEEDED
+        // ---------------------------------------------
+
+        const parsedPlayersNeeded =
+            Number(additionalPlayersNeeded);
+
+        if (
+            !Number.isInteger(parsedPlayersNeeded) ||
+            parsedPlayersNeeded < 0
+        ) {
+            req.flash(
+                "error",
+                "Additional players needed must be a valid number."
+            );
+
+            return res.redirect("/sessions/new");
+        }
+
+
+        // ---------------------------------------------
+        // VALIDATE DATE
+        // ---------------------------------------------
+
+        const selectedDate = new Date(sessionDate);
+
+        if (Number.isNaN(selectedDate.getTime())) {
+            req.flash(
+                "error",
+                "Please enter a valid date and time."
+            );
+
+            return res.redirect("/sessions/new");
+        }
+
+
+        if (selectedDate <= new Date()) {
+            req.flash(
+                "error",
+                "The session date and time must be in the future."
+            );
+
+            return res.redirect("/sessions/new");
+        }
+
+
+        // ---------------------------------------------
+        // VALIDATE VENUE
+        // ---------------------------------------------
+
+        const cleanedVenue = venue.trim();
+
+        if (!cleanedVenue) {
+            req.flash(
+                "error",
+                "Venue cannot be empty."
+            );
+
+            return res.redirect("/sessions/new");
+        }
+
+
+        // ---------------------------------------------
+        // CHECK CREATOR PARTICIPATION
+        // ---------------------------------------------
+
+        const isCreatorParticipating =
+            creatorParticipating === "yes";
+
+
+        // ---------------------------------------------
+        // CREATE SESSION
+        // ---------------------------------------------
+
+        const session = await Session.create({
+
+            sportId: Number(sportId),
+
+            createdBy: req.user.id,
+
+            sessionDate: selectedDate,
+
+            venue: cleanedVenue,
+
+            teamOnePlayers: teamOnePlayers
+                ? teamOnePlayers.trim()
+                : null,
+
+            teamTwoPlayers: teamTwoPlayers
+                ? teamTwoPlayers.trim()
+                : null,
+
+            additionalPlayersNeeded:
+                parsedPlayersNeeded,
+
+            status: "scheduled",
+        });
+
+
+        // ---------------------------------------------
+        // ADD CREATOR AS PARTICIPANT
+        // ---------------------------------------------
+
+        if (isCreatorParticipating) {
+
+            await SessionParticipant.create({
+
                 sessionId: session.id,
+
                 userId: req.user.id,
-            },
-        });
 
-        if (existingParticipant) {
-            req.flash(
-                "error",
-                "You have already joined this session."
-            );
-            return res.redirect("/dashboard");
+            });
         }
 
-        if (session.additionalPlayersNeeded <= 0) {
-            req.flash(
-                "error",
-                "This session is already full."
-            );
-            return res.redirect("/dashboard");
-        }
 
-        await SessionParticipant.create({
-            sessionId: session.id,
-            userId: req.user.id,
-        });
-
-        session.additionalPlayersNeeded -= 1;
-
-        await session.save();
+        // ---------------------------------------------
+        // SUCCESS
+        // ---------------------------------------------
 
         req.flash(
             "success",
-            `You're in! You joined the ${session.Sport?.name || "sports"} session.`
+            `${sport.name} session created successfully!`
         );
 
         res.redirect("/dashboard");
 
     } catch (error) {
+
         console.error(error);
 
         req.flash(
             "error",
-            "We couldn't join this session. Please try again."
+            "We couldn't create the session. Please try again."
         );
 
-        res.redirect("/dashboard");
+        res.redirect("/sessions/new");
     }
 });
+
+
+// =========================================================
+// VIEW SESSION DETAILS
+// =========================================================
+
+router.get(
+    "/sessions/:id",
+    requireAuth,
+    async (req, res) => {
+
+        try {
+
+            const session = await Session.findByPk(
+                req.params.id,
+                {
+                    include: [
+                        {
+                            model: Sport,
+                        },
+                        {
+                            model: SessionParticipant,
+
+                            include: [
+                                {
+                                    model: User,
+                                },
+                            ],
+                        },
+                    ],
+                }
+            );
+
+
+            if (!session) {
+                return res
+                    .status(404)
+                    .send("Session not found.");
+            }
+
+
+            res.render(
+                "player/session-details",
+                {
+                    session,
+                    user: req.user,
+                }
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            res
+                .status(500)
+                .send("Something went wrong.");
+        }
+    }
+);
+
+
+// =========================================================
+// JOIN SESSION
+// =========================================================
+
+router.post(
+    "/sessions/:id/join",
+    requireAuth,
+    async (req, res) => {
+
+        try {
+
+            const session =
+                await Session.findByPk(
+                    req.params.id,
+                    {
+                        include: [
+                            {
+                                model: Sport,
+                            },
+                        ],
+                    }
+                );
+
+
+            // -----------------------------------------
+            // SESSION EXISTS?
+            // -----------------------------------------
+
+            if (!session) {
+
+                req.flash(
+                    "error",
+                    "This session could not be found."
+                );
+
+                return res.redirect("/dashboard");
+            }
+
+
+            // -----------------------------------------
+            // SESSION STATUS
+            // -----------------------------------------
+
+            if (session.status !== "scheduled") {
+
+                req.flash(
+                    "error",
+                    "This session is no longer available."
+                );
+
+                return res.redirect("/dashboard");
+            }
+
+
+            // -----------------------------------------
+            // SESSION IN THE FUTURE?
+            // -----------------------------------------
+
+            if (
+                new Date(session.sessionDate) <=
+                new Date()
+            ) {
+
+                req.flash(
+                    "error",
+                    "This session has already started. You can no longer join it."
+                );
+
+                return res.redirect("/dashboard");
+            }
+
+
+            // -----------------------------------------
+            // ALREADY JOINED?
+            // -----------------------------------------
+
+            const existingParticipant =
+                await SessionParticipant.findOne({
+                    where: {
+                        sessionId: session.id,
+                        userId: req.user.id,
+                    },
+                });
+
+
+            if (existingParticipant) {
+
+                req.flash(
+                    "error",
+                    "You have already joined this session."
+                );
+
+                return res.redirect("/dashboard");
+            }
+
+
+            // -----------------------------------------
+            // SESSION FULL?
+            // -----------------------------------------
+
+            if (session.additionalPlayersNeeded <= 0) {
+
+                req.flash(
+                    "error",
+                    "This session is already full."
+                );
+
+                return res.redirect("/dashboard");
+            }
+
+
+            // -----------------------------------------
+            // ADD PLAYER
+            // -----------------------------------------
+
+            await SessionParticipant.create({
+
+                sessionId: session.id,
+
+                userId: req.user.id,
+            });
+
+
+            // -----------------------------------------
+            // REDUCE AVAILABLE SPOTS
+            // -----------------------------------------
+
+            session.additionalPlayersNeeded -= 1;
+
+            await session.save();
+
+
+            // -----------------------------------------
+            // SUCCESS
+            // -----------------------------------------
+
+            req.flash(
+                "success",
+                `You're in! You joined the ${session.Sport.name} session.`
+            );
+
+            res.redirect("/dashboard");
+
+        } catch (error) {
+
+            console.error(error);
+
+            req.flash(
+                "error",
+                "We couldn't join this session. Please try again."
+            );
+
+            res.redirect("/dashboard");
+        }
+    }
+);
 
 
 module.exports = router;

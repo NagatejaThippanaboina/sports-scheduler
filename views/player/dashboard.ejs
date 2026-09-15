@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Player Dashboard | Sports Scheduler</title>
 
@@ -13,14 +16,14 @@
 
 <div class="player-app">
 
-    <!-- NAVIGATION -->
+    <!-- =====================================================
+         NAVIGATION
+         ===================================================== -->
 
-    <header class="player-nav">
-
+    <nav class="player-nav">
         <div class="player-nav-inner">
 
             <a href="/dashboard" class="player-brand">
-
                 <div class="player-brand-mark">
                     S
                 </div>
@@ -29,9 +32,7 @@
                     <strong>Sports Scheduler</strong>
                     <span>Plan. Play. Connect.</span>
                 </div>
-
             </a>
-
 
             <div class="player-nav-right">
 
@@ -48,45 +49,54 @@
 
                 </div>
 
-
-                <form action="/logout" method="POST">
-
+                <form
+                    action="/logout"
+                    method="POST"
+                    class="logout-form"
+                >
                     <button
                         type="submit"
                         class="player-logout"
                     >
                         Logout
                     </button>
-
                 </form>
 
             </div>
 
         </div>
+    </nav>
 
-    </header>
 
-
-    <!-- PAGE -->
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
 
     <main class="player-main">
 
         <div class="player-container">
 
 
-            <!-- ALERTS -->
+            <!-- =================================================
+                 FLASH MESSAGES
+                 ================================================= -->
 
             <% if (successMessages && successMessages.length > 0) { %>
 
-                <% successMessages.forEach((message) => { %>
+                <% successMessages.forEach(message => { %>
 
                     <div class="player-alert player-alert-success">
 
-                        <span class="player-alert-icon">✓</span>
+                        <div class="player-alert-icon">
+                            ✓
+                        </div>
 
                         <div>
                             <strong>Success</strong>
-                            <p><%= message %></p>
+
+                            <p>
+                                <%= message %>
+                            </p>
                         </div>
 
                     </div>
@@ -98,15 +108,20 @@
 
             <% if (errorMessages && errorMessages.length > 0) { %>
 
-                <% errorMessages.forEach((message) => { %>
+                <% errorMessages.forEach(message => { %>
 
                     <div class="player-alert player-alert-error">
 
-                        <span class="player-alert-icon">!</span>
+                        <div class="player-alert-icon">
+                            !
+                        </div>
 
                         <div>
-                            <strong>Something needs your attention</strong>
-                            <p><%= message %></p>
+                            <strong>Something went wrong</strong>
+
+                            <p>
+                                <%= message %>
+                            </p>
                         </div>
 
                     </div>
@@ -116,7 +131,9 @@
             <% } %>
 
 
-            <!-- HEADER -->
+            <!-- =================================================
+                 WELCOME HEADER
+                 ================================================= -->
 
             <section class="player-welcome">
 
@@ -127,28 +144,30 @@
                     </span>
 
                     <h1>
-                        Welcome back, <%= user.name %>
+                        Welcome back, <%= user.name %>.
                     </h1>
 
                     <p>
-                        Find your next game, join a session, and stay active.
+                        Find a game, join your teammates, or create
+                        your own session.
                     </p>
 
                 </div>
 
-
                 <a
-                    href="#available"
+                    href="/sessions/new"
                     class="player-primary-action"
                 >
-                    Find a game
-                    <span>→</span>
+                    <span>+</span>
+                    Create Session
                 </a>
 
             </section>
 
 
-            <!-- STATS -->
+            <!-- =================================================
+                 STATS
+                 ================================================= -->
 
             <section class="player-stats">
 
@@ -163,7 +182,7 @@
                     </div>
 
                     <div class="player-stat-description">
-                        Games open to join
+                        Upcoming sessions you can join
                     </div>
 
                 </div>
@@ -180,7 +199,7 @@
                     </div>
 
                     <div class="player-stat-description">
-                        Games you're playing
+                        Sessions you've joined
                     </div>
 
                 </div>
@@ -189,7 +208,7 @@
                 <div class="player-stat">
 
                     <div class="player-stat-label">
-                        My sessions
+                        My Sessions
                     </div>
 
                     <div class="player-stat-value">
@@ -197,7 +216,7 @@
                     </div>
 
                     <div class="player-stat-description">
-                        Games you've created
+                        Sessions created by you
                     </div>
 
                 </div>
@@ -205,12 +224,11 @@
             </section>
 
 
-            <!-- AVAILABLE -->
+            <!-- =================================================
+                 AVAILABLE SESSIONS
+                 ================================================= -->
 
-            <section
-                class="player-section"
-                id="available"
-            >
+            <section class="player-section">
 
                 <div class="player-section-header">
 
@@ -221,28 +239,48 @@
                         </span>
 
                         <h2>
-                            Available sessions
+                            Available Sessions
                         </h2>
 
                         <p>
-                            Join a game that still has room for you.
+                            Find an upcoming game and join before
+                            the spots fill up.
                         </p>
 
                     </div>
 
                     <span class="player-section-count">
                         <%= sessions.length %>
-                        <%= sessions.length === 1 ? "game" : "games" %>
+                        <%= sessions.length === 1 ? "session" : "sessions" %>
                     </span>
 
                 </div>
 
 
-                <% if (sessions.length > 0) { %>
+                <% if (sessions.length === 0) { %>
+
+                    <div class="player-empty-state">
+
+                        <div class="player-empty-icon">
+                            ○
+                        </div>
+
+                        <h3>
+                            No sessions available right now
+                        </h3>
+
+                        <p>
+                            Check back later or create your own
+                            session and bring your team together.
+                        </p>
+
+                    </div>
+
+                <% } else { %>
 
                     <div class="player-session-grid">
 
-                        <% sessions.forEach((item) => { %>
+                        <% sessions.forEach(session => { %>
 
                             <article class="player-session-card">
 
@@ -251,18 +289,28 @@
                                     <div class="session-sport">
 
                                         <div class="session-sport-mark">
-                                            <%= item.Sport.name.charAt(0).toUpperCase() %>
+                                            <%= session.Sport.name.charAt(0).toUpperCase() %>
                                         </div>
 
                                         <span>
-                                            <%= item.Sport.name %>
+                                            <%= session.Sport.name %>
                                         </span>
 
                                     </div>
 
-                                    <span class="session-status">
-                                        Scheduled
-                                    </span>
+                                    <% if (session.additionalPlayersNeeded > 0) { %>
+
+                                        <span class="session-status">
+                                            Open
+                                        </span>
+
+                                    <% } else { %>
+
+                                        <span class="session-status">
+                                            Full
+                                        </span>
+
+                                    <% } %>
 
                                 </div>
 
@@ -270,33 +318,55 @@
                                 <div class="session-card-body">
 
                                     <h3>
-                                        <%= item.Sport.name %> session
+                                        <%= session.Sport.name %> Session
                                     </h3>
 
 
                                     <div class="session-meta">
 
                                         <div>
-                                            <span class="session-meta-icon">◷</span>
+
+                                            <span class="session-meta-icon">
+                                                📅
+                                            </span>
 
                                             <span>
-                                                <%= new Date(item.sessionDate).toLocaleString([], {
+                                                <%= new Date(session.sessionDate).toLocaleDateString("en-IN", {
                                                     day: "numeric",
                                                     month: "short",
-                                                    year: "numeric",
-                                                    hour: "numeric",
-                                                    minute: "2-digit"
+                                                    year: "numeric"
                                                 }) %>
                                             </span>
+
                                         </div>
 
 
                                         <div>
-                                            <span class="session-meta-icon">⌖</span>
+
+                                            <span class="session-meta-icon">
+                                                🕒
+                                            </span>
 
                                             <span>
-                                                <%= item.venue %>
+                                                <%= new Date(session.sessionDate).toLocaleTimeString("en-IN", {
+                                                    hour: "numeric",
+                                                    minute: "2-digit"
+                                                }) %>
                                             </span>
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <span class="session-meta-icon">
+                                                📍
+                                            </span>
+
+                                            <span>
+                                                <%= session.venue %>
+                                            </span>
+
                                         </div>
 
                                     </div>
@@ -308,31 +378,22 @@
 
                                     <div class="session-spots">
 
-                                        <% if (item.additionalPlayersNeeded > 0) { %>
+                                        <strong>
+                                            <%= session.additionalPlayersNeeded %>
+                                        </strong>
 
-                                            <strong>
-                                                <%= item.additionalPlayersNeeded %>
-                                            </strong>
-
-                                            <span>
-                                                <%= item.additionalPlayersNeeded === 1
-                                                    ? "spot remaining"
-                                                    : "spots remaining" %>
-                                            </span>
-
-                                        <% } else { %>
-
-                                            <strong class="session-full-label">
-                                                Full
-                                            </strong>
-
-                                        <% } %>
+                                        <span>
+                                            <%= session.additionalPlayersNeeded === 1
+                                                ? "spot left"
+                                                : "spots left"
+                                            %>
+                                        </span>
 
                                     </div>
 
 
                                     <a
-                                        href="/sessions/<%= item.id %>"
+                                        href="/sessions/<%= session.id %>"
                                         class="session-details-link"
                                     >
                                         View details
@@ -347,30 +408,14 @@
 
                     </div>
 
-                <% } else { %>
-
-                    <div class="player-empty-state">
-
-                        <div class="player-empty-icon">
-                            ✓
-                        </div>
-
-                        <h3>
-                            You're all caught up
-                        </h3>
-
-                        <p>
-                            There are no available sessions right now.
-                        </p>
-
-                    </div>
-
                 <% } %>
 
             </section>
 
 
-            <!-- JOINED -->
+            <!-- =================================================
+                 JOINED SESSIONS
+                 ================================================= -->
 
             <section class="player-section">
 
@@ -379,11 +424,11 @@
                     <div>
 
                         <span class="player-section-eyebrow">
-                            YOUR ACTIVITY
+                            YOUR SCHEDULE
                         </span>
 
                         <h2>
-                            Joined sessions
+                            Joined Sessions
                         </h2>
 
                         <p>
@@ -394,30 +439,49 @@
 
                     <span class="player-section-count">
                         <%= joinedSessions.length %>
-                        <%= joinedSessions.length === 1 ? "game" : "games" %>
+                        <%= joinedSessions.length === 1 ? "session" : "sessions" %>
                     </span>
 
                 </div>
 
 
-                <% if (joinedSessions.length > 0) { %>
+                <% if (joinedSessions.length === 0) { %>
+
+                    <div class="player-empty-state">
+
+                        <div class="player-empty-icon">
+                            +
+                        </div>
+
+                        <h3>
+                            You haven't joined any sessions
+                        </h3>
+
+                        <p>
+                            Explore available sessions above and
+                            join your next game.
+                        </p>
+
+                    </div>
+
+                <% } else { %>
 
                     <div class="player-session-grid">
 
-                        <% joinedSessions.forEach((item) => { %>
+                        <% joinedSessions.forEach(session => { %>
 
-                            <article class="player-session-card joined-card">
+                            <article class="player-session-card">
 
                                 <div class="session-card-top">
 
                                     <div class="session-sport">
 
                                         <div class="session-sport-mark">
-                                            <%= item.Sport.name.charAt(0).toUpperCase() %>
+                                            <%= session.Sport.name.charAt(0).toUpperCase() %>
                                         </div>
 
                                         <span>
-                                            <%= item.Sport.name %>
+                                            <%= session.Sport.name %>
                                         </span>
 
                                     </div>
@@ -432,33 +496,55 @@
                                 <div class="session-card-body">
 
                                     <h3>
-                                        <%= item.Sport.name %> session
+                                        <%= session.Sport.name %> Session
                                     </h3>
 
 
                                     <div class="session-meta">
 
                                         <div>
-                                            <span class="session-meta-icon">◷</span>
+
+                                            <span class="session-meta-icon">
+                                                📅
+                                            </span>
 
                                             <span>
-                                                <%= new Date(item.sessionDate).toLocaleString([], {
+                                                <%= new Date(session.sessionDate).toLocaleDateString("en-IN", {
                                                     day: "numeric",
                                                     month: "short",
-                                                    year: "numeric",
-                                                    hour: "numeric",
-                                                    minute: "2-digit"
+                                                    year: "numeric"
                                                 }) %>
                                             </span>
+
                                         </div>
 
 
                                         <div>
-                                            <span class="session-meta-icon">⌖</span>
+
+                                            <span class="session-meta-icon">
+                                                🕒
+                                            </span>
 
                                             <span>
-                                                <%= item.venue %>
+                                                <%= new Date(session.sessionDate).toLocaleTimeString("en-IN", {
+                                                    hour: "numeric",
+                                                    minute: "2-digit"
+                                                }) %>
                                             </span>
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <span class="session-meta-icon">
+                                                📍
+                                            </span>
+
+                                            <span>
+                                                <%= session.venue %>
+                                            </span>
+
                                         </div>
 
                                     </div>
@@ -469,11 +555,11 @@
                                 <div class="session-card-footer">
 
                                     <span class="joined-label">
-                                        ✓ You're playing
+                                        You're playing
                                     </span>
 
                                     <a
-                                        href="/sessions/<%= item.id %>"
+                                        href="/sessions/<%= session.id %>"
                                         class="session-details-link"
                                     >
                                         View details
@@ -488,30 +574,14 @@
 
                     </div>
 
-                <% } else { %>
-
-                    <div class="player-empty-state">
-
-                        <div class="player-empty-icon">
-                            +
-                        </div>
-
-                        <h3>
-                            No joined sessions
-                        </h3>
-
-                        <p>
-                            Browse available games above and join your first session.
-                        </p>
-
-                    </div>
-
                 <% } %>
 
             </section>
 
 
-            <!-- MY SESSIONS -->
+            <!-- =================================================
+                 MY SESSIONS
+                 ================================================= -->
 
             <section class="player-section">
 
@@ -524,11 +594,11 @@
                         </span>
 
                         <h2>
-                            My sessions
+                            My Sessions
                         </h2>
 
                         <p>
-                            Sessions you've created for other players.
+                            Manage the games you've created.
                         </p>
 
                     </div>
@@ -541,11 +611,42 @@
                 </div>
 
 
-                <% if (mySessions.length > 0) { %>
+                <% if (mySessions.length === 0) { %>
+
+                    <div class="player-empty-state">
+
+                        <div class="player-empty-icon">
+                            +
+                        </div>
+
+                        <h3>
+                            Create your first session
+                        </h3>
+
+                        <p>
+                            Set the sport, time and venue, then let
+                            other players join your game.
+                        </p>
+
+                        <div style="margin-top: 18px;">
+
+                            <a
+                                href="/sessions/new"
+                                class="player-primary-action"
+                            >
+                                <span>+</span>
+                                Create Session
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                <% } else { %>
 
                     <div class="player-session-grid">
 
-                        <% mySessions.forEach((item) => { %>
+                        <% mySessions.forEach(session => { %>
 
                             <article class="player-session-card">
 
@@ -554,18 +655,34 @@
                                     <div class="session-sport">
 
                                         <div class="session-sport-mark">
-                                            <%= item.Sport.name.charAt(0).toUpperCase() %>
+                                            <%= session.Sport.name.charAt(0).toUpperCase() %>
                                         </div>
 
                                         <span>
-                                            <%= item.Sport.name %>
+                                            <%= session.Sport.name %>
                                         </span>
 
                                     </div>
 
-                                    <span class="session-status">
-                                        <%= item.status %>
-                                    </span>
+                                    <% if (session.status === "cancelled") { %>
+
+                                        <span class="session-status">
+                                            Cancelled
+                                        </span>
+
+                                    <% } else if (session.additionalPlayersNeeded > 0) { %>
+
+                                        <span class="session-status">
+                                            Open
+                                        </span>
+
+                                    <% } else { %>
+
+                                        <span class="session-status">
+                                            Full
+                                        </span>
+
+                                    <% } %>
 
                                 </div>
 
@@ -573,32 +690,55 @@
                                 <div class="session-card-body">
 
                                     <h3>
-                                        <%= item.Sport.name %> session
+                                        <%= session.Sport.name %> Session
                                     </h3>
+
 
                                     <div class="session-meta">
 
                                         <div>
-                                            <span class="session-meta-icon">◷</span>
+
+                                            <span class="session-meta-icon">
+                                                📅
+                                            </span>
 
                                             <span>
-                                                <%= new Date(item.sessionDate).toLocaleString([], {
+                                                <%= new Date(session.sessionDate).toLocaleDateString("en-IN", {
                                                     day: "numeric",
                                                     month: "short",
-                                                    year: "numeric",
-                                                    hour: "numeric",
-                                                    minute: "2-digit"
+                                                    year: "numeric"
                                                 }) %>
                                             </span>
+
                                         </div>
 
 
                                         <div>
-                                            <span class="session-meta-icon">⌖</span>
+
+                                            <span class="session-meta-icon">
+                                                🕒
+                                            </span>
 
                                             <span>
-                                                <%= item.venue %>
+                                                <%= new Date(session.sessionDate).toLocaleTimeString("en-IN", {
+                                                    hour: "numeric",
+                                                    minute: "2-digit"
+                                                }) %>
                                             </span>
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <span class="session-meta-icon">
+                                                📍
+                                            </span>
+
+                                            <span>
+                                                <%= session.venue %>
+                                            </span>
+
                                         </div>
 
                                     </div>
@@ -609,14 +749,11 @@
                                 <div class="session-card-footer">
 
                                     <span class="created-session-label">
-                                        <%= item.SessionParticipants
-                                            ? item.SessionParticipants.length
-                                            : 0 %>
-                                        joined
+                                        Created by you
                                     </span>
 
                                     <a
-                                        href="/sessions/<%= item.id %>"
+                                        href="/sessions/<%= session.id %>"
                                         class="session-details-link"
                                     >
                                         View details
@@ -628,24 +765,6 @@
                             </article>
 
                         <% }) %>
-
-                    </div>
-
-                <% } else { %>
-
-                    <div class="player-empty-state">
-
-                        <div class="player-empty-icon">
-                            +
-                        </div>
-
-                        <h3>
-                            No sessions created yet
-                        </h3>
-
-                        <p>
-                            Once player session creation is added, your games will appear here.
-                        </p>
 
                     </div>
 
