@@ -6,6 +6,7 @@ const flash = require("connect-flash");
 const passport = require("./config/auth/passport");
 
 const authRoutes = require("./routes/auth");
+const adminRoutes = require("./routes/admin");
 
 const app = express();
 
@@ -43,6 +44,8 @@ app.get("/dashboard", (req, res) => {
 });
 
 app.use("/", authRoutes);
+
+app.use("/", adminRoutes);
 
 app.listen(PORT, () => {
     console.log(`Sports Scheduler running on port ${PORT}`);

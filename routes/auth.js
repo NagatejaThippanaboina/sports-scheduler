@@ -1,9 +1,14 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
+
 const { User } = require("../models");
 
 const router = express.Router();
+
+// ===============================
+// SIGN UP
+// ===============================
 
 router.get("/signup", (req, res) => {
     res.render("signup");
@@ -41,6 +46,10 @@ router.post("/signup", async (req, res) => {
     }
 });
 
+// ===============================
+// LOGIN
+// ===============================
+
 router.get("/login", (req, res) => {
     res.render("login");
 });
@@ -51,13 +60,23 @@ router.post(
         failureRedirect: "/login",
     }),
     (req, res) => {
+        if (req.user.role === "admin") {
+            return res.redirect("/admin/dashboard");
+        }
+
         res.redirect("/dashboard");
     }
 );
 
+// ===============================
+// LOGOUT
+// ===============================
+
 router.post("/logout", (req, res, next) => {
     req.logout((error) => {
-        if (error) return next(error);
+        if (error) {
+            return next(error);
+        }
 
         req.session.destroy(() => {
             res.redirect("/");

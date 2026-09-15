@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard | Sports Scheduler</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <main>
+
+        <h1>Admin Dashboard</h1>
+
+        <p>
+            Welcome, <%= user.name %>!
+        </p>
+
+        <a href="/admin/sports/new">
+            Create New Sport
+        </a>
+
+        <h2>Your Sports</h2>
+
+        <% if (sports.length === 0) { %>
+
+            <p>You haven't created any sports yet.</p>
+
+        <% } else { %>
+
+            <% sports.forEach((sport) => { %>
+
+                <div>
+                    <h3><%= sport.name %></h3>
+                </div>
+
+            <% }); %>
+
+        <% } %>
+
+        <form action="/logout" method="POST">
+            <button type="submit">Logout</button>
+        </form>
+
+    </main>
+
+</body>
+</html>
