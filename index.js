@@ -1,4 +1,11 @@
+require("dotenv").config();
+
 const express = require("express");
+const session = require("express-session");
+const flash = require("connect-flash");
+const passport = require("./config/auth/passport");
+
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
@@ -10,9 +17,32 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+    })
+);
+
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.get("/", (req, res) => {
     res.render("home");
 });
+
+app.get("/dashboard", (req, res) => {
+    if (!req.isAuthenticated()) {
+        return res.redirect("/login");
+    }
+
+    res.send(`Welcome ${req.user.name}! Role: ${req.user.role}`);
+});
+
+app.use("/", authRoutes);
 
 app.listen(PORT, () => {
     console.log(`Sports Scheduler running on port ${PORT}`);
