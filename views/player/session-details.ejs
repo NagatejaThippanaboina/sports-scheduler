@@ -27,13 +27,22 @@
             </a>
 
             <div class="topbar-actions">
-                <span class="role-badge">Player</span>
+
+                <span class="role-badge">
+                    Player
+                </span>
 
                 <form action="/logout" method="POST">
-                    <button type="submit" class="nav-logout">
+
+                    <button
+                        type="submit"
+                        class="nav-logout"
+                    >
                         Logout
                     </button>
+
                 </form>
+
             </div>
 
         </div>
@@ -46,12 +55,17 @@
         <div class="container">
 
             <!-- BACK LINK -->
-            <a href="/dashboard" class="session-back-link">
+
+            <a
+                href="/dashboard"
+                class="session-back-link"
+            >
                 ← Back to dashboard
             </a>
 
 
             <!-- SESSION HERO -->
+
             <section class="session-hero">
 
                 <div class="session-hero-content">
@@ -60,48 +74,114 @@
                         <%= session.Sport.name.charAt(0).toUpperCase() %>
                     </div>
 
+
                     <div>
 
                         <div class="session-kicker">
+
                             <span class="session-status-dot"></span>
-                            Scheduled session
+
+                            <% if (session.status === "cancelled") { %>
+
+                                Cancelled session
+
+                            <% } else if (session.status === "completed") { %>
+
+                                Completed session
+
+                            <% } else { %>
+
+                                Scheduled session
+
+                            <% } %>
+
                         </div>
+
 
                         <h1>
                             <%= session.Sport.name %>
                         </h1>
 
+
                         <p>
-                            Join this game and play with other players.
+
+                            <% if (session.status === "cancelled") { %>
+
+                                This session has been cancelled.
+
+                            <% } else { %>
+
+                                Join this game and play with other players.
+
+                            <% } %>
+
                         </p>
 
                     </div>
 
                 </div>
 
+
                 <div class="session-hero-badge">
-                    <span><%= session.additionalPlayersNeeded %></span>
-                    <small>spots left</small>
+
+                    <% if (session.status === "cancelled") { %>
+
+                        <span>—</span>
+
+                        <small>
+                            cancelled
+                        </small>
+
+                    <% } else { %>
+
+                        <span>
+                            <%= session.additionalPlayersNeeded %>
+                        </span>
+
+                        <small>
+                            spots left
+                        </small>
+
+                    <% } %>
+
                 </div>
 
             </section>
 
 
             <!-- SESSION CONTENT -->
+
             <div class="session-layout">
 
-                <!-- LEFT -->
+
+                <!-- LEFT SIDE -->
+
                 <section class="session-main-card">
 
+
                     <div class="section-heading">
+
                         <div>
-                            <span class="section-eyebrow">GAME INFORMATION</span>
-                            <h2>Session details</h2>
+
+                            <span class="section-eyebrow">
+                                GAME INFORMATION
+                            </span>
+
+                            <h2>
+                                Session details
+                            </h2>
+
                         </div>
+
                     </div>
 
 
+                    <!-- SESSION INFORMATION -->
+
                     <div class="session-info-grid">
+
+
+                        <!-- DATE -->
 
                         <div class="session-info-box">
 
@@ -110,15 +190,21 @@
                             </div>
 
                             <div>
-                                <span>Date & time</span>
+
+                                <span>
+                                    Date & time
+                                </span>
 
                                 <strong>
                                     <%= new Date(session.sessionDate).toLocaleString() %>
                                 </strong>
+
                             </div>
 
                         </div>
 
+
+                        <!-- VENUE -->
 
                         <div class="session-info-box">
 
@@ -127,15 +213,21 @@
                             </div>
 
                             <div>
-                                <span>Venue</span>
+
+                                <span>
+                                    Venue
+                                </span>
 
                                 <strong>
                                     <%= session.venue %>
                                 </strong>
+
                             </div>
 
                         </div>
 
+
+                        <!-- PLAYERS NEEDED -->
 
                         <div class="session-info-box">
 
@@ -144,16 +236,28 @@
                             </div>
 
                             <div>
-                                <span>Players needed</span>
+
+                                <span>
+                                    Players needed
+                                </span>
 
                                 <strong>
+
                                     <%= session.additionalPlayersNeeded %>
-                                    <%= session.additionalPlayersNeeded === 1 ? "player" : "players" %>
+
+                                    <%= session.additionalPlayersNeeded === 1
+                                        ? "player"
+                                        : "players"
+                                    %>
+
                                 </strong>
+
                             </div>
 
                         </div>
 
+
+                        <!-- SPORT -->
 
                         <div class="session-info-box">
 
@@ -162,50 +266,141 @@
                             </div>
 
                             <div>
-                                <span>Sport</span>
+
+                                <span>
+                                    Sport
+                                </span>
 
                                 <strong>
                                     <%= session.Sport.name %>
                                 </strong>
+
                             </div>
 
                         </div>
+
 
                     </div>
 
 
+                    <!-- CANCELLATION INFORMATION -->
+
+                    <% if (session.status === "cancelled") { %>
+
+                        <div class="players-section">
+
+                            <div class="section-heading">
+
+                                <div>
+
+                                    <span class="section-eyebrow">
+                                        SESSION STATUS
+                                    </span>
+
+                                    <h2>
+                                        Session cancelled
+                                    </h2>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="empty-players">
+
+                                <div class="empty-players-icon">
+                                    !
+                                </div>
+
+
+                                <div>
+
+                                    <strong>
+                                        This session is no longer available.
+                                    </strong>
+
+
+                                    <% if (session.cancellationReason) { %>
+
+                                        <p>
+                                            Reason:
+                                            <%= session.cancellationReason %>
+                                        </p>
+
+                                    <% } %>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    <% } %>
+
+
                     <!-- PLAYERS -->
+
                     <div class="players-section">
+
 
                         <div class="section-heading players-heading">
 
                             <div>
-                                <span class="section-eyebrow">TEAM</span>
+
+                                <span class="section-eyebrow">
+                                    TEAM
+                                </span>
+
 
                                 <h2>
+
                                     Players joined
+
                                     <span class="player-count">
-                                        <%= session.SessionParticipants ? session.SessionParticipants.length : 0 %>
+
+                                        <%= session.SessionParticipants
+                                            ? session.SessionParticipants.length
+                                            : 0
+                                        %>
+
                                     </span>
+
                                 </h2>
+
                             </div>
 
                         </div>
 
 
-                        <% if (session.SessionParticipants && session.SessionParticipants.length > 0) { %>
+                        <% if (
+                            session.SessionParticipants &&
+                            session.SessionParticipants.length > 0
+                        ) { %>
+
 
                             <div class="participant-grid">
 
-                                <% session.SessionParticipants.forEach((participant, index) => { %>
+
+                                <% session.SessionParticipants.forEach(
+                                    (participant, index) => {
+                                %>
+
 
                                     <div class="participant-card">
 
+
                                         <div class="participant-avatar">
-                                            <%= participant.User.name.charAt(0).toUpperCase() %>
+
+                                            <%= participant.User.name
+                                                .charAt(0)
+                                                .toUpperCase()
+                                            %>
+
                                         </div>
 
+
                                         <div class="participant-info">
+
                                             <strong>
                                                 <%= participant.User.name %>
                                             </strong>
@@ -213,130 +408,281 @@
                                             <span>
                                                 Player <%= index + 1 %>
                                             </span>
+
                                         </div>
+
 
                                         <span class="participant-check">
                                             ✓
                                         </span>
 
+
                                     </div>
+
 
                                 <% }) %>
 
+
                             </div>
+
 
                         <% } else { %>
 
+
                             <div class="empty-players">
+
 
                                 <div class="empty-players-icon">
                                     👥
                                 </div>
 
+
                                 <div>
-                                    <strong>No players yet</strong>
+
+                                    <strong>
+                                        No players yet
+                                    </strong>
 
                                     <p>
-                                        Be the first player to join this session.
+                                        Be the first player to join
+                                        this session.
                                     </p>
+
                                 </div>
+
 
                             </div>
 
+
                         <% } %>
 
+
                     </div>
+
 
                 </section>
 
 
                 <!-- RIGHT SIDEBAR -->
+
                 <aside class="session-sidebar">
 
-                    <div class="join-card">
 
-                        <div class="join-card-top">
+                    <!-- JOIN SESSION -->
 
-                            <span class="join-label">
-                                READY TO PLAY?
-                            </span>
+                    <% if (session.status === "scheduled") { %>
 
-                            <h2>
-                                Join this session
-                            </h2>
 
-                            <p>
-                                Secure your spot before all available places are filled.
+                        <div class="join-card">
+
+
+                            <div class="join-card-top">
+
+                                <span class="join-label">
+                                    READY TO PLAY?
+                                </span>
+
+
+                                <h2>
+                                    Join this session
+                                </h2>
+
+
+                                <p>
+                                    Secure your spot before all available
+                                    places are filled.
+                                </p>
+
+                            </div>
+
+
+                            <div class="spots-display">
+
+                                <strong>
+                                    <%= session.additionalPlayersNeeded %>
+                                </strong>
+
+
+                                <span>
+
+                                    <%= session.additionalPlayersNeeded === 1
+                                        ? "spot"
+                                        : "spots"
+                                    %>
+
+                                    remaining
+
+                                </span>
+
+                            </div>
+
+
+                            <% if (session.additionalPlayersNeeded > 0) { %>
+
+
+                                <form
+                                    action="/sessions/<%= session.id %>/join"
+                                    method="POST"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="join-button"
+                                    >
+
+                                        Join session
+
+                                        <span>
+                                            →
+                                        </span>
+
+                                    </button>
+
+                                </form>
+
+
+                            <% } else { %>
+
+
+                                <button
+                                    type="button"
+                                    class="join-button join-disabled"
+                                    disabled
+                                >
+                                    Session full
+                                </button>
+
+
+                            <% } %>
+
+
+                            <p class="join-note">
+                                You can only join a session once.
                             </p>
 
-                        </div>
-
-
-                        <div class="spots-display">
-
-                            <strong>
-                                <%= session.additionalPlayersNeeded %>
-                            </strong>
-
-                            <span>
-                                <%= session.additionalPlayersNeeded === 1 ? "spot" : "spots" %> remaining
-                            </span>
 
                         </div>
 
 
-                        <% if (session.additionalPlayersNeeded > 0) { %>
+                    <% } %>
+
+
+                    <!-- CANCEL SESSION -->
+
+                    <% if (
+                        session.status === "scheduled" &&
+                        session.createdBy === user.id &&
+                        new Date(session.sessionDate) > new Date()
+                    ) { %>
+
+
+                        <div class="join-card">
+
+
+                            <div class="join-card-top">
+
+                                <span class="join-label">
+                                    SESSION MANAGEMENT
+                                </span>
+
+
+                                <h2>
+                                    Cancel session
+                                </h2>
+
+
+                                <p>
+                                    Cancelling will make this session
+                                    unavailable to all players.
+                                </p>
+
+                            </div>
+
 
                             <form
-                                action="/sessions/<%= session.id %>/join"
+                                action="/sessions/<%= session.id %>/cancel"
                                 method="POST"
+                                onsubmit="return confirm('Are you sure you want to cancel this session?');"
                             >
+
+
+                                <div style="margin-bottom: 16px;">
+
+                                    <label
+                                        for="cancellationReason"
+                                        style="display: block; margin-bottom: 8px;"
+                                    >
+                                        Cancellation reason
+                                    </label>
+
+
+                                    <textarea
+                                        id="cancellationReason"
+                                        name="cancellationReason"
+                                        rows="4"
+                                        required
+                                        placeholder="Enter the reason for cancelling this session..."
+                                        style="width: 100%; box-sizing: border-box; padding: 10px; resize: vertical;"
+                                    ></textarea>
+
+                                </div>
+
 
                                 <button
                                     type="submit"
                                     class="join-button"
                                 >
-                                    Join session
-                                    <span>→</span>
+                                    Cancel session
                                 </button>
+
 
                             </form>
 
-                        <% } else { %>
 
-                            <button
-                                type="button"
-                                class="join-button join-disabled"
-                                disabled
-                            >
-                                Session full
-                            </button>
-
-                        <% } %>
+                        </div>
 
 
-                        <p class="join-note">
-                            You can only join a session once.
-                        </p>
+                    <% } %>
 
-                    </div>
 
+                    <!-- SIDEBAR NOTE -->
 
                     <div class="sidebar-note">
 
-                        <span>💡</span>
+                        <span>
+                            💡
+                        </span>
+
 
                         <div>
-                            <strong>Good to know</strong>
+
+                            <strong>
+                                Good to know
+                            </strong>
+
 
                             <p>
-                                Sessions cannot be joined after their scheduled time.
+
+                                <% if (session.status === "cancelled") { %>
+
+                                    This session has been cancelled.
+
+                                <% } else { %>
+
+                                    Sessions cannot be joined after
+                                    their scheduled time.
+
+                                <% } %>
+
                             </p>
+
                         </div>
 
                     </div>
 
+
                 </aside>
+
 
             </div>
 

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Sport | Sports Scheduler</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- =========================
+         TOP NAVIGATION
+         ========================= -->
+
+    <header class="topbar">
+
+        <div class="container topbar-inner">
+
+            <a href="/admin/dashboard" class="brand">
+
+                <div class="brand-mark">
+                    S
+                </div>
+
+                <div class="brand-text">
+
+                    <span class="brand-name">
+                        Sports Scheduler
+                    </span>
+
+                    <span class="brand-subtitle">
+                        Admin Console
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <div class="nav-actions">
+
+                <div class="user-chip">
+
+                    <div class="user-avatar">
+                        <%= user ? user.name.charAt(0).toUpperCase() : "A" %>
+                    </div>
+
+                    <span>
+                        <%= user ? user.name : "Sports Admin" %>
+                    </span>
+
+                </div>
+
+
+                <form
+                    action="/logout"
+                    method="POST"
+                    class="logout-form"
+                >
+
+                    <button
+                        type="submit"
+                        class="logout-button"
+                    >
+                        Logout
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN CONTENT
+         ========================= -->
+
+    <main class="container">
+
+        <!-- BACK LINK -->
+
+        <a
+            href="/admin/dashboard"
+            class="session-back-link"
+        >
+            ← Back to dashboard
+        </a>
+
+
+        <!-- PAGE HEADER -->
+
+        <section class="page-header">
+
+            <div class="page-header-content">
+
+                <div>
+
+                    <p class="eyebrow">
+                        Manage Sport
+                    </p>
+
+                    <h1 class="page-title">
+                        Edit Sport
+                    </h1>
+
+                    <p class="page-description">
+                        Update the name of this sport.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             EDIT FORM
+             ========================= -->
+
+        <section class="edit-sport-wrapper">
+
+            <div class="card edit-sport-card">
+
+
+                <!-- CARD HEADER -->
+
+                <div class="edit-sport-header">
+
+                    <div class="edit-sport-icon">
+                        🏅
+                    </div>
+
+                    <div>
+
+                        <span class="section-eyebrow">
+                            SPORT INFORMATION
+                        </span>
+
+                        <h2>
+                            Sport details
+                        </h2>
+
+                        <p>
+                            Change the name displayed throughout
+                            Sports Scheduler.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FORM -->
+
+                <form
+                    action="/admin/sports/<%= sport.id %>/edit"
+                    method="POST"
+                    class="edit-sport-form"
+                >
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            Sport name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            value="<%= sport.name %>"
+                            placeholder="Enter sport name"
+                            required
+                            autocomplete="off"
+                        >
+
+                        <small>
+                            Example: Football, Cricket, Volleyball
+                        </small>
+
+                    </div>
+
+
+                    <!-- ACTIONS -->
+
+                    <div class="edit-sport-actions">
+
+                        <a
+                            href="/admin/dashboard"
+                            class="btn btn-secondary"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Save Changes
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

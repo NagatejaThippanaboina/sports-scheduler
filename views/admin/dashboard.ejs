@@ -1,573 +1,695 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
     <title>Admin Dashboard | Sports Scheduler</title>
 
     <link rel="stylesheet" href="/css/style.css">
+
+
 </head>
 
 <body>
 
-<div class="page">
 
-    <!-- =========================
-         TOP NAVIGATION
+    <div class="page">
+
+        <!-- =========================
+     TOP NAVIGATION
+     ========================= -->
+
+        <header class="topbar">
+
+            <div class="container topbar-inner">
+
+                <a href="/admin/dashboard" class="brand">
+
+                    <div class="brand-mark">
+                        S
+                    </div>
+
+                    <div class="brand-text">
+
+                        <span class="brand-name">
+                            Sports Scheduler
+                        </span>
+
+                        <span class="brand-subtitle">
+                            Admin Console
+                        </span>
+
+                    </div>
+
+                </a>
+
+                <div class="nav-actions">
+
+                    <div class="user-chip">
+
+                        <div class="user-avatar">
+                            <%= user.name.charAt(0).toUpperCase() %>
+                        </div>
+
+                        <span>
+                            <%= user.name %>
+                        </span>
+
+                    </div>
+
+                    <form action="/logout" method="POST" class="logout-form">
+
+                        <button type="submit" class="logout-button">
+                            Logout
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+     MAIN CONTENT
+     ========================= -->
+
+        <main class="container">
+
+            <!-- PAGE HEADER -->
+
+            <section class="page-header">
+
+                <div class="page-header-content">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            Admin Dashboard
+                        </p>
+
+                        <h1 class="page-title">
+                            Welcome back, <%= user.name %> 👋
+                        </h1>
+
+                        <p class="page-description">
+                            Manage your sports, organize sessions, and keep
+                            your sports community moving.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+         FLASH MESSAGES
          ========================= -->
 
-    <header class="topbar">
+            <% if (successMessages && successMessages.length> 0) { %>
 
-        <div class="container topbar-inner">
+                <div class="flash-message flash-success">
 
-            <a href="/admin/dashboard" class="brand">
-
-                <div class="brand-mark">
-                    S
-                </div>
-
-                <div class="brand-text">
-
-                    <span class="brand-name">
-                        Sports Scheduler
-                    </span>
-
-                    <span class="brand-subtitle">
-                        Admin Console
-                    </span>
-
-                </div>
-
-            </a>
-
-            <div class="nav-actions">
-
-                <div class="user-chip">
-
-                    <div class="user-avatar">
-                        <%= user.name.charAt(0).toUpperCase() %>
-                    </div>
+                    <strong>✓ Success</strong>
 
                     <span>
-                        <%= user.name %>
+                        <%= successMessages[0] %>
                     </span>
 
                 </div>
 
-                <form
-                    action="/logout"
-                    method="POST"
-                    class="logout-form"
-                >
-
-                    <button
-                        type="submit"
-                        class="logout-button"
-                    >
-                        Logout
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
-
-    </header>
+                <% } %>
 
 
-    <!-- =========================
-         MAIN CONTENT
+                    <% if (errorMessages && errorMessages.length> 0) { %>
+
+                        <div class="flash-message flash-error">
+
+                            <strong>⚠ Error</strong>
+
+                            <span>
+                                <%= errorMessages[0] %>
+                            </span>
+
+                        </div>
+
+                        <% } %>
+
+
+                            <!-- =========================
+         QUICK ACTIONS
          ========================= -->
 
-    <main class="container">
+                            <section class="action-panel">
 
-        <!-- PAGE HEADER -->
+                                <div class="action-panel-text">
 
-        <section class="page-header">
+                                    <h2>
+                                        Ready to schedule a game?
+                                    </h2>
 
-            <div class="page-header-content">
+                                    <p>
+                                        Create a sport or set up your next sports session.
+                                    </p>
 
-                <div>
+                                </div>
 
-                    <p class="eyebrow">
-                        Admin Dashboard
-                    </p>
+                                <div class="action-panel-buttons">
 
-                    <h1 class="page-title">
-                        Welcome back, <%= user.name %> 👋
-                    </h1>
+                                    <a href="/admin/sports/new" class="btn btn-secondary">
+                                        + Create Sport
+                                    </a>
 
-                    <p class="page-description">
-                        Manage your sports, organize sessions, and keep
-                        your sports community moving.
-                    </p>
+                                    <a href="/admin/sessions/new" class="btn btn-primary">
+                                        + Create Session
+                                    </a>
 
-                </div>
+                                </div>
 
-            </div>
+                            </section>
 
-        </section>
 
+                            <!-- =========================
+         STATISTICS
+         ========================= -->
 
-        <!-- =========================
-             QUICK ACTIONS
-             ========================= -->
+                            <section class="stats-grid">
 
-        <section class="action-panel">
+                                <div class="stat-card">
 
-            <div class="action-panel-text">
+                                    <div class="stat-top">
 
-                <h2>
-                    Ready to schedule a game?
-                </h2>
+                                        <span class="stat-label">
+                                            Sports Created
+                                        </span>
 
-                <p>
-                    Create a sport or set up your next sports session.
-                </p>
+                                        <div class="stat-icon">
+                                            🏆
+                                        </div>
 
-            </div>
-
-            <div class="action-panel-buttons">
-
-                <a
-                    href="/admin/sports/new"
-                    class="btn btn-secondary"
-                >
-                    + Create Sport
-                </a>
-
-                <a
-                    href="/admin/sessions/new"
-                    class="btn btn-primary"
-                >
-                    + Create Session
-                </a>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             STATISTICS
-             ========================= -->
-
-        <section class="stats-grid">
-
-            <div class="stat-card">
-
-                <div class="stat-top">
-
-                    <span class="stat-label">
-                        Sports Created
-                    </span>
-
-                    <div class="stat-icon">
-                        🏆
-                    </div>
-
-                </div>
-
-                <div class="stat-value">
-                    <%= sports.length %>
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-top">
-
-                    <span class="stat-label">
-                        Sessions Created
-                    </span>
-
-                    <div class="stat-icon">
-                        📅
-                    </div>
-
-                </div>
-
-                <div class="stat-value">
-                    <%= sessions.length %>
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-top">
-
-                    <span class="stat-label">
-                        Scheduled Sessions
-                    </span>
-
-                    <div class="stat-icon">
-                        ⚡
-                    </div>
-
-                </div>
-
-                <div class="stat-value">
-
-                    <%= sessions.filter(
-                        session => session.status === "scheduled"
-                    ).length %>
-
-                </div>
-
-            </div>
-
-
-            <div class="stat-card">
-
-                <div class="stat-top">
-
-                    <span class="stat-label">
-                        Players Needed
-                    </span>
-
-                    <div class="stat-icon">
-                        👥
-                    </div>
-
-                </div>
-
-                <div class="stat-value">
-
-                    <%= sessions.reduce(
-                        (total, session) =>
-                            total +
-                            Number(session.additionalPlayersNeeded || 0),
-                        0
-                    ) %>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             SPORTS
-             ========================= -->
-
-        <section class="section">
-
-            <div class="section-header">
-
-                <div>
-
-                    <h2 class="section-title">
-                        Your Sports
-                    </h2>
-
-                    <p class="section-subtitle">
-                        Sports currently available for your sessions.
-                    </p>
-
-                </div>
-
-                <a
-                    href="/admin/sports/new"
-                    class="btn btn-secondary btn-small"
-                >
-                    + Add Sport
-                </a>
-
-            </div>
-
-
-            <% if (sports.length === 0) { %>
-
-                <div class="empty-state">
-
-                    <div class="empty-icon">
-                        🏆
-                    </div>
-
-                    <h3 class="empty-title">
-                        No sports yet
-                    </h3>
-
-                    <p class="empty-description">
-                        Create your first sport so you can start
-                        organizing sessions.
-                    </p>
-
-                    <a
-                        href="/admin/sports/new"
-                        class="btn btn-primary"
-                    >
-                        Create Your First Sport
-                    </a>
-
-                </div>
-
-            <% } else { %>
-
-                <div class="card-grid">
-
-                    <% sports.forEach((sport) => { %>
-
-                        <article class="card sport-card">
-
-                            <div class="sport-icon">
-                                🏅
-                            </div>
-
-                            <h3 class="sport-name">
-                                <%= sport.name %>
-                            </h3>
-
-                            <p class="sport-type">
-                                Available sport
-                            </p>
-
-                        </article>
-
-                    <% }); %>
-
-                </div>
-
-            <% } %>
-
-        </section>
-
-
-        <!-- =========================
-             SESSIONS
-             ========================= -->
-
-        <section class="section">
-
-            <div class="section-header">
-
-                <div>
-
-                    <h2 class="section-title">
-                        Your Sessions
-                    </h2>
-
-                    <p class="section-subtitle">
-                        Keep track of the games you have organized.
-                    </p>
-
-                </div>
-
-                <a
-                    href="/admin/sessions/new"
-                    class="btn btn-primary btn-small"
-                >
-                    + New Session
-                </a>
-
-            </div>
-
-
-            <% if (sessions.length === 0) { %>
-
-                <div class="empty-state">
-
-                    <div class="empty-icon">
-                        📅
-                    </div>
-
-                    <h3 class="empty-title">
-                        No sessions yet
-                    </h3>
-
-                    <p class="empty-description">
-                        Create a session and invite players to join
-                        your next game.
-                    </p>
-
-                    <a
-                        href="/admin/sessions/new"
-                        class="btn btn-primary"
-                    >
-                        Create Session
-                    </a>
-
-                </div>
-
-            <% } else { %>
-
-                <div class="session-grid">
-
-                    <% sessions.forEach((session) => { %>
-
-                        <article class="card session-card">
-
-                            <div class="session-card-top">
-
-                                <div class="session-sport">
-
-                                    <div class="session-icon">
-                                        🏟️
                                     </div>
+
+                                    <div class="stat-value">
+                                        <%= sports.length %>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="stat-card">
+
+                                    <div class="stat-top">
+
+                                        <span class="stat-label">
+                                            Sessions Created
+                                        </span>
+
+                                        <div class="stat-icon">
+                                            📅
+                                        </div>
+
+                                    </div>
+
+                                    <div class="stat-value">
+                                        <%= sessions.length %>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="stat-card">
+
+                                    <div class="stat-top">
+
+                                        <span class="stat-label">
+                                            Scheduled Sessions
+                                        </span>
+
+                                        <div class="stat-icon">
+                                            ⚡
+                                        </div>
+
+                                    </div>
+
+                                    <div class="stat-value">
+
+                                        <%= sessions.filter( session=> session.status === "scheduled"
+                                            ).length %>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="stat-card">
+
+                                    <div class="stat-top">
+
+                                        <span class="stat-label">
+                                            Players Needed
+                                        </span>
+
+                                        <div class="stat-icon">
+                                            👥
+                                        </div>
+
+                                    </div>
+
+                                    <div class="stat-value">
+
+                                        <%= sessions.reduce( (total, session)=>
+                                            total +
+                                            Number(session.additionalPlayersNeeded || 0),
+                                            0
+                                            ) %>
+
+                                    </div>
+
+                                </div>
+
+                            </section>
+
+
+                            <!-- =========================
+         SPORTS
+         ========================= -->
+
+                            <section class="section">
+
+                                <div class="section-header">
 
                                     <div>
 
-                                        <h3 class="session-title">
-                                            <%= session.Sport
-                                                ? session.Sport.name
-                                                : "Unknown Sport" %>
-                                        </h3>
+                                        <h2 class="section-title">
+                                            Your Sports
+                                        </h2>
 
-                                        <p class="session-label">
-                                            Sports Session
+                                        <p class="section-subtitle">
+                                            Sports currently available for your sessions.
                                         </p>
 
                                     </div>
 
-                                </div>
-
-
-                                <% if (session.status === "scheduled") { %>
-
-                                    <span class="badge badge-success">
-                                        Scheduled
-                                    </span>
-
-                                <% } else { %>
-
-                                    <span class="badge badge-warning">
-                                        <%= session.status %>
-                                    </span>
-
-                                <% } %>
-
-                            </div>
-
-
-                            <div class="session-details">
-
-                                <div class="detail-row">
-
-                                    <span class="detail-icon">
-                                        📅
-                                    </span>
-
-                                    <span>
-                                        <span class="detail-value">
-                                            <%= new Date(
-                                                session.sessionDate
-                                            ).toLocaleString() %>
-                                        </span>
-                                    </span>
+                                    <a href="/admin/sports/new" class="btn btn-secondary btn-small">
+                                        + Add Sport
+                                    </a>
 
                                 </div>
 
 
-                                <div class="detail-row">
+                                <% if (sports.length===0) { %>
 
-                                    <span class="detail-icon">
-                                        📍
-                                    </span>
+                                    <div class="empty-state">
 
-                                    <span>
-                                        <span class="detail-value">
-                                            <%= session.venue %>
-                                        </span>
-                                    </span>
+                                        <div class="empty-icon">
+                                            🏆
+                                        </div>
 
-                                </div>
+                                        <h3 class="empty-title">
+                                            No sports yet
+                                        </h3>
 
+                                        <p class="empty-description">
+                                            Create your first sport so you can start
+                                            organizing sessions.
+                                        </p>
 
-                                <div class="detail-row">
+                                        <a href="/admin/sports/new" class="btn btn-primary">
+                                            Create Your First Sport
+                                        </a>
 
-                                    <span class="detail-icon">
-                                        👥
-                                    </span>
-
-                                    <span>
-                                        <span class="detail-value">
-                                            <%= session.additionalPlayersNeeded %>
-                                        </span>
-                                        additional players needed
-                                    </span>
-
-                                </div>
-                                <div class="detail-row">
-
-                                    <span class="detail-icon">
-                                        🧑‍🤝‍🧑
-                                    </span>
-
-                                    <span>
-                                        <span class="detail-value">
-                                            <%= session.SessionParticipants
-                                                ? session.SessionParticipants.length
-                                                : 0 %>
-                                        </span>
-                                        players joined
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                            <% if (
-                                session.SessionParticipants &&
-                                session.SessionParticipants.length > 0
-                            ) { %>
-
-                                <div class="session-players">
-
-                                    <strong>Joined players</strong>
-
-                                    <div>
-                                        <% session.SessionParticipants.forEach((participant) => { %>
-
-                                            <span class="badge badge-success">
-                                                <%= participant.User.name %>
-                                            </span>
-
-                                        <% }); %>
                                     </div>
 
+                                    <% } else { %>
+
+                                        <div class="card-grid">
+
+                                            <% sports.forEach((sport)=> { %>
+
+                                                <article class="card sport-card">
+
+                                                    <div class="sport-icon">
+                                                        🏅
+                                                    </div>
+
+                                                    <div class="sport-card-content">
+
+                                                        <h3 class="sport-name">
+                                                            <%= sport.name %>
+                                                        </h3>
+
+                                                    </div>
+
+                                                    <a href="/admin/sports/<%= sport.id %>/edit" class="sport-edit"
+                                                        aria-label="Edit <%= sport.name %>">
+                                                        Edit
+                                                    </a>
+
+                                                </article>
+
+                                                <% }); %>
+
+                                        </div>
+
+                                        <% } %>
+
+                            </section>
+
+
+                            <!-- =========================
+         SESSIONS
+         ========================= -->
+
+                            <section class="section">
+
+                                <div class="section-header">
+
+                                    <div>
+
+                                        <h2 class="section-title">
+                                            Your Sessions
+                                        </h2>
+
+                                        <p class="section-subtitle">
+                                            Keep track of the games you have organized.
+                                        </p>
+
+                                    </div>
+
+                                    <a href="/admin/sessions/new" class="btn btn-primary btn-small">
+                                        + New Session
+                                    </a>
+
                                 </div>
 
-                            <% } else { %>
 
-                                <div class="session-players">
+                                <% if (sessions.length===0) { %>
 
-                                    <strong>No players joined yet</strong>
+                                    <div class="empty-state">
 
-                                </div>
+                                        <div class="empty-icon">
+                                            📅
+                                        </div>
 
-                            <% } %>
-                            <div class="session-footer">
+                                        <h3 class="empty-title">
+                                            No sessions yet
+                                        </h3>
 
-                                <span class="session-label">
-                                    Created by you
-                                </span>
+                                        <p class="empty-description">
+                                            Create a session and invite players to join
+                                            your next game.
+                                        </p>
 
-                                <span class="badge badge-success">
-                                    Active
-                                </span>
+                                        <a href="/admin/sessions/new" class="btn btn-primary">
+                                            Create Session
+                                        </a>
 
-                            </div>
+                                    </div>
 
-                        </article>
+                                    <% } else { %>
 
-                    <% }); %>
+                                        <div class="session-grid">
 
-                </div>
+                                            <% sessions.forEach((session)=> { %>
 
-            <% } %>
+                                                <article class="card session-card">
 
-        </section>
+                                                    <!-- SESSION HEADER -->
 
-    </main>
+                                                    <div class="session-card-top">
 
-</div>
+                                                        <div class="session-sport">
+
+                                                            <div class="session-icon">
+                                                                🏟️
+                                                            </div>
+
+                                                            <div>
+
+                                                                <h3 class="session-title">
+
+                                                                    <%= session.Sport ? session.Sport.name
+                                                                        : "Unknown Sport" %>
+
+                                                                </h3>
+
+                                                                <p class="session-label">
+                                                                    Sports Session
+                                                                </p>
+
+                                                            </div>
+
+                                                        </div>
+
+
+                                                        <!-- STATUS -->
+
+                                                        <% if (session.status==="scheduled" ) { %>
+
+                                                            <span class="badge badge-success">
+                                                                Scheduled
+                                                            </span>
+
+                                                            <% } else if (session.status==="cancelled" ) { %>
+
+                                                                <span class="badge badge-warning">
+                                                                    Cancelled
+                                                                </span>
+
+                                                                <% } else if (session.status==="completed" ) { %>
+
+                                                                    <span class="badge badge-success">
+                                                                        Completed
+                                                                    </span>
+
+                                                                    <% } %>
+
+                                                    </div>
+
+
+                                                    <!-- SESSION DETAILS -->
+
+                                                    <div class="session-details">
+
+                                                        <div class="detail-row">
+
+                                                            <span class="detail-icon">
+                                                                📅
+                                                            </span>
+
+                                                            <span>
+
+                                                                <span class="detail-value">
+
+                                                                    <%= new Date( session.sessionDate ).toLocaleString()
+                                                                        %>
+
+                                                                </span>
+
+                                                            </span>
+
+                                                        </div>
+
+
+                                                        <div class="detail-row">
+
+                                                            <span class="detail-icon">
+                                                                📍
+                                                            </span>
+
+                                                            <span>
+
+                                                                <span class="detail-value">
+                                                                    <%= session.venue %>
+                                                                </span>
+
+                                                            </span>
+
+                                                        </div>
+
+
+                                                        <div class="detail-row">
+
+                                                            <span class="detail-icon">
+                                                                👥
+                                                            </span>
+
+                                                            <span>
+
+                                                                <span class="detail-value">
+                                                                    <%= session.additionalPlayersNeeded %>
+                                                                </span>
+
+                                                                additional players needed
+
+                                                            </span>
+
+                                                        </div>
+
+
+                                                        <div class="detail-row">
+
+                                                            <span class="detail-icon">
+                                                                🧑‍🤝‍🧑
+                                                            </span>
+
+                                                            <span>
+
+                                                                <span class="detail-value">
+
+                                                                    <%= session.SessionParticipants ?
+                                                                        session.SessionParticipants.length : 0 %>
+
+                                                                </span>
+
+                                                                players joined
+
+                                                            </span>
+
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <!-- JOINED PLAYERS -->
+
+                                                    <% if ( session.SessionParticipants &&
+                                                        session.SessionParticipants.length> 0
+                                                        ) { %>
+
+                                                        <div class="session-players">
+
+                                                            <strong>
+                                                                Joined players
+                                                            </strong>
+
+                                                            <div>
+
+                                                                <% session.SessionParticipants.forEach( (participant)=>
+                                                                    {
+                                                                    %>
+
+                                                                    <span class="badge badge-success">
+
+                                                                        <%= participant.User.name %>
+
+                                                                    </span>
+
+                                                                    <% }); %>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                        <% } else { %>
+
+                                                            <div class="session-players">
+
+                                                                <strong>
+                                                                    No players joined yet
+                                                                </strong>
+
+                                                            </div>
+
+                                                            <% } %>
+
+
+                                                                <!-- CANCELLATION INFORMATION -->
+
+                                                                <% if (session.status==="cancelled" ) { %>
+
+                                                                    <div class="session-cancelled-info">
+
+                                                                        <strong>
+                                                                            Session cancelled
+                                                                        </strong>
+
+                                                                        <p>
+                                                                            Reason:
+                                                                            <%= session.cancellationReason
+                                                                                || "No reason provided." %>
+                                                                        </p>
+
+                                                                    </div>
+
+                                                                    <% } %>
+
+
+                                                                        <!-- SESSION FOOTER -->
+
+                                                                        <div class="session-footer">
+
+                                                                            <span class="session-label">
+                                                                                Created by you
+                                                                            </span>
+
+
+                                                                            <% if (session.status==="scheduled" ) { %>
+
+                                                                                <form
+                                                                                    action="/admin/sessions/<%= session.id %>/cancel"
+                                                                                    method="POST"
+                                                                                    style="display: flex; gap: 8px; align-items: center;"
+                                                                                    onsubmit="return confirm('Are you sure you want to cancel this session?');">
+
+                                                                                    <input type="text"
+                                                                                        name="cancellationReason"
+                                                                                        placeholder="Cancellation reason"
+                                                                                        required
+                                                                                        style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px;">
+
+                                                                                    <button type="submit"
+                                                                                        class="btn btn-danger btn-small">
+                                                                                        Cancel Session
+                                                                                    </button>
+
+                                                                                </form>
+
+
+                                                                                <% } else if
+                                                                                    (session.status==="cancelled" ) { %>
+
+                                                                                    <span class="badge badge-warning">
+                                                                                        Cancelled
+                                                                                    </span>
+
+
+                                                                                    <% } else if
+                                                                                        (session.status==="completed" )
+                                                                                        { %>
+
+                                                                                        <span
+                                                                                            class="badge badge-success">
+                                                                                            Completed
+                                                                                        </span>
+
+                                                                                        <% } %>
+
+                                                                        </div>
+
+                                                </article>
+
+                                                <% }); %>
+
+                                        </div>
+
+                                        <% } %>
+
+                            </section>
+
+        </main>
+
+    </div>
+
 
 </body>
+
 </html>

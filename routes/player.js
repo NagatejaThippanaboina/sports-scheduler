@@ -443,4 +443,163 @@ router.post(
 );
 
 
+// =========================================================
+// CANCEL SESSION
+// =========================================================
+
+router.post(
+    "/sessions/:id/cancel",
+    requireAuth,
+    async (req, res) => {
+
+        try {
+
+            const { cancellationReason } = req.body;
+
+
+            // -----------------------------------------
+            // FIND SESSION
+            // -----------------------------------------
+
+            const session = await Session.findByPk(
+                req.params.id,
+                {
+                    include: [
+                        {
+                            model: Sport,
+                        },
+                    ],
+                }
+            );
+
+
+            // -----------------------------------------
+            // SESSION EXISTS?
+            // -----------------------------------------
+
+            if (!session) {
+
+                req.flash(
+                    "error",
+                    "This session could not be found."
+                );
+
+                return res.redirect("/dashboard");
+            }
+
+
+            // -----------------------------------------
+            // ONLY CREATOR CAN CANCEL
+            // -----------------------------------------
+
+            if (session.createdBy !== req.user.id) {
+
+                req.flash(
+                    "error",
+                    "You can only cancel sessions created by you."
+                );
+
+                return res.redirect(
+                    `/sessions/${session.id}`
+                );
+            }
+
+
+            // -----------------------------------------
+            // SESSION MUST BE SCHEDULED
+            // -----------------------------------------
+
+            if (session.status !== "scheduled") {
+
+                req.flash(
+                    "error",
+                    "This session is already cancelled or completed."
+                );
+
+                return res.redirect(
+                    `/sessions/${session.id}`
+                );
+            }
+
+
+            // -----------------------------------------
+            // SESSION MUST BE IN THE FUTURE
+            // -----------------------------------------
+
+            if (
+                new Date(session.sessionDate) <=
+                new Date()
+            ) {
+
+                req.flash(
+                    "error",
+                    "A session cannot be cancelled after its scheduled time."
+                );
+
+                return res.redirect(
+                    `/sessions/${session.id}`
+                );
+            }
+
+
+            // -----------------------------------------
+            // VALIDATE CANCELLATION REASON
+            // -----------------------------------------
+
+            const cleanedReason =
+                cancellationReason
+                    ? cancellationReason.trim()
+                    : "";
+
+
+            if (!cleanedReason) {
+
+                req.flash(
+                    "error",
+                    "Please provide a cancellation reason."
+                );
+
+                return res.redirect(
+                    `/sessions/${session.id}`
+                );
+            }
+
+
+            // -----------------------------------------
+            // CANCEL SESSION
+            // -----------------------------------------
+
+            session.status = "cancelled";
+
+            session.cancellationReason = cleanedReason;
+
+            await session.save();
+
+
+            // -----------------------------------------
+            // SUCCESS
+            // -----------------------------------------
+
+            req.flash(
+                "success",
+                `${session.Sport.name} session cancelled successfully.`
+            );
+
+            res.redirect("/dashboard");
+
+        } catch (error) {
+
+            console.error(error);
+
+            req.flash(
+                "error",
+                "We couldn't cancel this session. Please try again."
+            );
+
+            res.redirect("/dashboard");
+        }
+    }
+);
+
+
 module.exports = router;
