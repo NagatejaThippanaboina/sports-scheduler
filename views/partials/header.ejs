@@ -1,0 +1,124 @@
+<header class="topbar">
+    <div class="container topbar-inner" style="display: flex; justify-content: space-between; align-items: center;">
+
+        <!-- BRAND & ROLE BADGE -->
+        <div style="display: flex; align-items: center; gap: 14px;">
+            <a href="<%= user.role === 'admin' ? '/admin/dashboard' : '/dashboard' %>" class="brand"
+                style="text-decoration: none;">
+                <div class="brand-mark">S</div>
+                <div class="brand-text">
+                    <span class="brand-name">Sports Scheduler</span>
+                    <span class="brand-tagline">Plan. Play. Connect.</span>
+                </div>
+            </a>
+            <span class="badge"
+                style="background: <%= user.role === 'admin' ? '#dbeafe' : '#e0e7ff' %>; color: <%= user.role === 'admin' ? '#1e40af' : '#3730a3' %>; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; font-weight: 700; padding: 4px 10px; border-radius: 6px;">
+                <%= user.role==='admin' ? 'Admin' : 'Player' %>
+            </span>
+        </div>
+
+        <!-- TOPBAR NAVIGATION & UNIFIED ACCOUNT MENU -->
+        <div class="topbar-actions" style="display: flex; align-items: center; gap: 12px;">
+
+            <% if (user.role==='admin' ) { %>
+                <a href="/admin/dashboard" class="btn btn-secondary btn-small"
+                    style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 600;">
+                    <span>⚙️</span> Admin Console
+                </a>
+                <a href="/dashboard" class="btn btn-secondary btn-small"
+                    style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 600;">
+                    <span>🎮</span> Player Mode
+                </a>
+                <a href="/admin/reports" class="btn btn-secondary btn-small"
+                    style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 600;">
+                    <span>📊</span> Reports
+                </a>
+                <% } else { %>
+                    <a href="/dashboard" class="btn btn-secondary btn-small"
+                        style="text-decoration: none; font-weight: 600;">Dashboard</a>
+                    <% } %>
+
+                        <!-- SINGLE UNIFIED ACCOUNT DROPDOWN CONTROL -->
+                        <div class="account-menu-container" style="position: relative;">
+                            <button type="button" class="account-menu-trigger" id="accountMenuBtn"
+                                onclick="toggleAccountMenu()"
+                                style="display: flex; align-items: center; gap: 8px; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 20px; padding: 6px 14px; cursor: pointer; font-size: 14px; font-weight: 600; color: #1e293b; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s ease;"
+                                aria-expanded="false">
+                                <span
+                                    style="display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--primary, #2563eb); color: white; font-weight: 700; font-size: 12px;">
+                                    <%= user.name.charAt(0).toUpperCase() %>
+                                </span>
+                                <span>
+                                    <%= user.name %>
+                                </span>
+                                <span style="font-size: 10px; color: #64748b;">▼</span>
+                            </button>
+
+                            <!-- ACCOUNT POPOVER MENU -->
+                            <div class="account-dropdown-menu" id="accountDropdownMenu"
+                                style="display: none; position: absolute; right: 0; top: calc(100% + 8px); width: 240px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); z-index: 1000; padding: 8px 0; overflow: hidden;">
+
+                                <!-- USER IDENTITY BANNER -->
+                                <div style="padding: 12px 16px; background: #f8fafc; border-bottom: 1px solid #f1f5f9;">
+                                    <div
+                                        style="font-weight: 700; font-size: 14px; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <%= user.name %>
+                                    </div>
+                                    <div
+                                        style="font-size: 12px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;">
+                                        <%= user.email %>
+                                    </div>
+                                </div>
+
+                                <!-- PROFILE & SECURITY LINKS -->
+                                <a href="/profile"
+                                    style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; font-size: 13px; font-weight: 500; color: #334155; text-decoration: none; transition: background 0.15s ease;"
+                                    onmouseover="this.style.background='#f1f5f9'"
+                                    onmouseout="this.style.background='transparent'">
+                                    <span>👤</span> Account Profile
+                                </a>
+
+                                <a href="/profile#change-password"
+                                    style="display: flex; align-items: center; gap: 10px; padding: 10px 16px; font-size: 13px; font-weight: 500; color: #334155; text-decoration: none; transition: background 0.15s ease;"
+                                    onmouseover="this.style.background='#f1f5f9'"
+                                    onmouseout="this.style.background='transparent'">
+                                    <span>🔒</span> Change Password
+                                </a>
+
+                                <div style="height: 1px; background: #f1f5f9; margin: 4px 0;"></div>
+
+                                <!-- LOGOUT ACTION -->
+                                <form action="/logout" method="POST" style="margin: 0;">
+                                    <button type="submit"
+                                        style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 16px; font-size: 13px; font-weight: 600; color: #dc2626; background: none; border: none; cursor: pointer; text-align: left; transition: background 0.15s ease;"
+                                        onmouseover="this.style.background='#fef2f2'"
+                                        onmouseout="this.style.background='transparent'">
+                                        <span>🚪</span> Sign Out
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+        </div>
+    </div>
+</header>
+
+<script>
+    function toggleAccountMenu() {
+        const menu = document.getElementById("accountDropdownMenu");
+        const btn = document.getElementById("accountMenuBtn");
+        if (menu) {
+            const isHidden = menu.style.display === "none" || menu.style.display === "";
+            menu.style.display = isHidden ? "block" : "none";
+            if (btn) btn.setAttribute("aria-expanded", isHidden ? "true" : "false");
+        }
+    }
+
+    document.addEventListener("click", function (e) {
+        const container = document.querySelector(".account-menu-container");
+        const menu = document.getElementById("accountDropdownMenu");
+        if (container && menu && !container.contains(e.target)) {
+            menu.style.display = "none";
+        }
+    });
+</script>

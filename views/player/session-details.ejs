@@ -17,354 +17,268 @@
     <div class="page">
 
         <!-- TOP NAVIGATION -->
-        <header class="topbar">
-            <div class="container topbar-inner">
-
-                <a href="/dashboard" class="brand">
-                    <div class="brand-mark">S</div>
-
-                    <div class="brand-text">
-                        <span class="brand-name">Sports Scheduler</span>
-                        <span class="brand-tagline">Plan. Play. Connect.</span>
-                    </div>
-                </a>
-
-                <div class="topbar-actions" style="display: flex; align-items: center; gap: 12px;">
-                    <a href="<%= user.role === 'admin' ? '/admin/dashboard' : '/dashboard' %>"
-                        class="btn btn-secondary btn-small" style="text-decoration: none;">Dashboard</a>
-                    <a href="/profile" class="btn btn-secondary btn-small" style="text-decoration: none;">Profile</a>
-                    <form action="/logout" method="POST" style="margin: 0;">
-                        <button type="submit" class="btn btn-secondary btn-small">Logout</button>
-                    </form>
-                </div>
-
-            </div>
-        </header>
+        <%- include('../partials/header') %>
 
 
-        <!-- MAIN CONTENT -->
-        <main class="session-page">
+            <!-- MAIN CONTENT -->
+            <main class="session-page">
 
-            <div class="container">
+                <div class="container">
 
-                <!-- BACK LINK -->
+                    <!-- BACK LINK -->
 
-                <a href="/dashboard" class="session-back-link">
-                    ← Back to dashboard
-                </a>
+                    <a href="/dashboard" class="session-back-link">
+                        ← Back to dashboard
+                    </a>
 
-                <% if (typeof errorMessages !=='undefined' && errorMessages.length> 0) { %>
-                    <div
-                        style="margin: 16px 0; padding: 14px 18px; background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 8px; color: #991b1b; font-size: 14px; font-weight: 500;">
-                        <%= errorMessages[0] %>
-                    </div>
-                    <% } %>
+                    <% if (typeof errorMessages !=='undefined' && errorMessages.length> 0) { %>
+                        <div
+                            style="margin: 16px 0; padding: 14px 18px; background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 8px; color: #991b1b; font-size: 14px; font-weight: 500;">
+                            <%= errorMessages[0] %>
+                        </div>
+                        <% } %>
 
-                        <% if (typeof successMessages !=='undefined' && successMessages.length> 0) { %>
-                            <div
-                                style="margin: 16px 0; padding: 14px 18px; background: #f0fdf4; border-left: 4px solid #22c55e; border-radius: 8px; color: #166534; font-size: 14px; font-weight: 500;">
-                                <%= successMessages[0] %>
-                            </div>
-                            <% } %>
-
-
-                                <!-- SESSION HERO -->
-
-                                <section class="session-hero">
-
-                                    <div class="session-hero-content">
-
-                                        <div class="session-sport-icon">
-                                            <%= session.Sport.name.charAt(0).toUpperCase() %>
-                                        </div>
+                            <% if (typeof successMessages !=='undefined' && successMessages.length> 0) { %>
+                                <div
+                                    style="margin: 16px 0; padding: 14px 18px; background: #f0fdf4; border-left: 4px solid #22c55e; border-radius: 8px; color: #166534; font-size: 14px; font-weight: 500;">
+                                    <%= successMessages[0] %>
+                                </div>
+                                <% } %>
 
 
-                                        <div>
+                                    <!-- SESSION HERO -->
 
-                                            <div class="session-kicker">
+                                    <section class="session-hero">
 
-                                                <span class="session-status-dot"></span>
+                                        <div class="session-hero-content">
 
-                                                <% if (session.status==="cancelled" ) { %>
-
-                                                    Cancelled session
-
-                                                    <% } else if (session.status==="completed" ) { %>
-
-                                                        Completed session
-
-                                                        <% } else { %>
-
-                                                            Scheduled session
-
-                                                            <% } %>
-
+                                            <div class="session-sport-icon">
+                                                <%= session.Sport.name.charAt(0).toUpperCase() %>
                                             </div>
 
-
-                                            <h1>
-                                                <%= session.Sport.name %>
-                                            </h1>
-
-
-                                            <p>
-
-                                                <% if (session.status==="cancelled" ) { %>
-
-                                                    This session has been cancelled.
-
-                                                    <% } else { %>
-
-                                                        Join this game and play with other players.
-
-                                                        <% } %>
-
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="session-hero-badge">
-
-                                        <% if (session.status==="cancelled" ) { %>
-
-                                            <span>—</span>
-
-                                            <small>
-                                                cancelled
-                                            </small>
-
-                                            <% } else { %>
-
-                                                <span>
-                                                    <%= session.additionalPlayersNeeded %>
-                                                </span>
-
-                                                <small>
-                                                    spots left
-                                                </small>
-
-                                                <% } %>
-
-                                    </div>
-
-                                </section>
-
-
-                                <!-- SESSION CONTENT -->
-
-                                <div class="session-layout">
-
-
-                                    <!-- LEFT SIDE -->
-
-                                    <section class="session-main-card">
-
-
-                                        <div class="section-heading">
 
                                             <div>
 
-                                                <span class="section-eyebrow">
-                                                    GAME INFORMATION
-                                                </span>
+                                                <div class="session-kicker">
 
-                                                <h2>
-                                                    Session details
-                                                </h2>
+                                                    <span class="session-status-dot"></span>
 
-                                            </div>
+                                                    <% if (session.status==="cancelled" ) { %>
 
-                                        </div>
+                                                        Cancelled session
 
+                                                        <% } else if (session.status==="completed" ) { %>
 
-                                        <!-- SESSION INFORMATION -->
+                                                            Completed session
 
-                                        <div class="session-info-grid">
+                                                            <% } else { %>
 
+                                                                Scheduled session
 
-                                            <!-- DATE -->
-
-                                            <div class="session-info-box">
-
-                                                <div class="session-info-icon">
-                                                    📅
-                                                </div>
-
-                                                <div>
-
-                                                    <span>
-                                                        Date & time
-                                                    </span>
-
-                                                    <strong>
-                                                        <%= new Date(session.sessionDate).toLocaleString() %>
-                                                    </strong>
-
-                                                </div>
-
-                                            </div>
-
-
-                                            <!-- VENUE -->
-
-                                            <div class="session-info-box">
-
-                                                <div class="session-info-icon">
-                                                    📍
-                                                </div>
-
-                                                <div>
-
-                                                    <span>
-                                                        Venue
-                                                    </span>
-
-                                                    <strong>
-                                                        <%= session.venue %>
-                                                    </strong>
-
-                                                </div>
-
-                                            </div>
-
-
-                                            <!-- PLAYERS NEEDED -->
-
-                                            <div class="session-info-box">
-
-                                                <div class="session-info-icon">
-                                                    👥
-                                                </div>
-
-                                                <div>
-
-                                                    <span>
-                                                        Players needed
-                                                    </span>
-
-                                                    <strong>
-
-                                                        <%= session.additionalPlayersNeeded %>
-
-                                                            <%= session.additionalPlayersNeeded===1 ? "player"
-                                                                : "players" %>
-
-                                                    </strong>
-
-                                                </div>
-
-                                            </div>
-
-
-                                            <!-- SPORT -->
-
-                                            <div class="session-info-box">
-
-                                                <div class="session-info-icon">
-                                                    🏆
-                                                </div>
-
-                                                <div>
-
-                                                    <span>
-                                                        Sport
-                                                    </span>
-
-                                                    <strong>
-                                                        <%= session.Sport.name %>
-                                                    </strong>
-
-                                                </div>
-
-                                            </div>
-
-
-                                        </div>
-
-
-                                        <!-- CANCELLATION INFORMATION -->
-
-                                        <% if (session.status==="cancelled" ) { %>
-
-                                            <div class="players-section">
-
-                                                <div class="section-heading">
-
-                                                    <div>
-
-                                                        <span class="section-eyebrow">
-                                                            SESSION STATUS
-                                                        </span>
-
-                                                        <h2>
-                                                            Session cancelled
-                                                        </h2>
-
-                                                    </div>
+                                                                <% } %>
 
                                                 </div>
 
 
-                                                <div class="empty-players">
-
-                                                    <div class="empty-players-icon">
-                                                        !
-                                                    </div>
+                                                <h1>
+                                                    <%= session.Sport.name %>
+                                                </h1>
 
 
-                                                    <div>
+                                                <p>
 
-                                                        <strong>
-                                                            This session is no longer available.
-                                                        </strong>
+                                                    <% if (session.status==="cancelled" ) { %>
 
+                                                        This session has been cancelled.
 
-                                                        <% if (session.cancellationReason) { %>
+                                                        <% } else { %>
 
-                                                            <p>
-                                                                Reason:
-                                                                <%= session.cancellationReason %>
-                                                            </p>
+                                                            Join this game and play with other players.
 
                                                             <% } %>
 
-                                                    </div>
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="session-hero-badge">
+
+                                            <% if (session.status==="cancelled" ) { %>
+
+                                                <span>—</span>
+
+                                                <small>
+                                                    cancelled
+                                                </small>
+
+                                                <% } else { %>
+
+                                                    <span>
+                                                        <%= session.additionalPlayersNeeded %>
+                                                    </span>
+
+                                                    <small>
+                                                        spots left
+                                                    </small>
+
+                                                    <% } %>
+
+                                        </div>
+
+                                    </section>
+
+
+                                    <!-- SESSION CONTENT -->
+
+                                    <div class="session-layout">
+
+
+                                        <!-- LEFT SIDE -->
+
+                                        <section class="session-main-card">
+
+
+                                            <div class="section-heading">
+
+                                                <div>
+
+                                                    <span class="section-eyebrow">
+                                                        GAME INFORMATION
+                                                    </span>
+
+                                                    <h2>
+                                                        Session details
+                                                    </h2>
 
                                                 </div>
 
                                             </div>
 
-                                            <% } %>
+
+                                            <!-- SESSION INFORMATION -->
+
+                                            <div class="session-info-grid">
 
 
-                                                <!-- PLAYERS -->
+                                                <!-- DATE -->
+
+                                                <div class="session-info-box">
+
+                                                    <div class="session-info-icon">
+                                                        📅
+                                                    </div>
+
+                                                    <div>
+
+                                                        <span>
+                                                            Date & time
+                                                        </span>
+
+                                                        <strong>
+                                                            <%= new Date(session.sessionDate).toLocaleString() %>
+                                                        </strong>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                <!-- VENUE -->
+
+                                                <div class="session-info-box">
+
+                                                    <div class="session-info-icon">
+                                                        📍
+                                                    </div>
+
+                                                    <div>
+
+                                                        <span>
+                                                            Venue
+                                                        </span>
+
+                                                        <strong>
+                                                            <%= session.venue %>
+                                                        </strong>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                <!-- PLAYERS NEEDED -->
+
+                                                <div class="session-info-box">
+
+                                                    <div class="session-info-icon">
+                                                        👥
+                                                    </div>
+
+                                                    <div>
+
+                                                        <span>
+                                                            Players needed
+                                                        </span>
+
+                                                        <strong>
+
+                                                            <%= session.additionalPlayersNeeded %>
+
+                                                                <%= session.additionalPlayersNeeded===1 ? "player"
+                                                                    : "players" %>
+
+                                                        </strong>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                                <!-- SPORT -->
+
+                                                <div class="session-info-box">
+
+                                                    <div class="session-info-icon">
+                                                        🏆
+                                                    </div>
+
+                                                    <div>
+
+                                                        <span>
+                                                            Sport
+                                                        </span>
+
+                                                        <strong>
+                                                            <%= session.Sport.name %>
+                                                        </strong>
+
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+
+
+                                            <!-- CANCELLATION INFORMATION -->
+
+                                            <% if (session.status==="cancelled" ) { %>
 
                                                 <div class="players-section">
 
-
-                                                    <div class="section-heading players-heading">
+                                                    <div class="section-heading">
 
                                                         <div>
 
                                                             <span class="section-eyebrow">
-                                                                TEAM
+                                                                SESSION STATUS
                                                             </span>
 
-
                                                             <h2>
-
-                                                                Players joined
-
-                                                                <span class="player-count">
-
-                                                                    <%= session.SessionParticipants ?
-                                                                        session.SessionParticipants.length : 0 %>
-
-                                                                </span>
-
+                                                                Session cancelled
                                                             </h2>
 
                                                         </div>
@@ -372,294 +286,360 @@
                                                     </div>
 
 
-                                                    <% if ( session.SessionParticipants &&
-                                                        session.SessionParticipants.length> 0
-                                                        ) { %>
+                                                    <div class="empty-players">
+
+                                                        <div class="empty-players-icon">
+                                                            !
+                                                        </div>
 
 
-                                                        <div class="participant-grid">
+                                                        <div>
+
+                                                            <strong>
+                                                                This session is no longer available.
+                                                            </strong>
 
 
-                                                            <% session.SessionParticipants.forEach( (participant,
-                                                                index)=> {
-                                                                %>
+                                                            <% if (session.cancellationReason) { %>
+
+                                                                <p>
+                                                                    Reason:
+                                                                    <%= session.cancellationReason %>
+                                                                </p>
+
+                                                                <% } %>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <% } %>
 
 
-                                                                <div class="participant-card">
+                                                    <!-- PLAYERS -->
+
+                                                    <div class="players-section">
 
 
-                                                                    <div class="participant-avatar">
+                                                        <div class="section-heading players-heading">
 
-                                                                        <%= participant.User.name .charAt(0)
-                                                                            .toUpperCase() %>
+                                                            <div>
 
-                                                                    </div>
+                                                                <span class="section-eyebrow">
+                                                                    TEAM
+                                                                </span>
 
 
-                                                                    <div class="participant-info">
+                                                                <h2>
 
-                                                                        <strong>
-                                                                            <%= participant.User.name %>
-                                                                        </strong>
+                                                                    Players joined
 
-                                                                        <span>
-                                                                            Player <%= index + 1 %>
+                                                                    <span class="player-count">
+
+                                                                        <%= session.SessionParticipants ?
+                                                                            session.SessionParticipants.length : 0 %>
+
+                                                                    </span>
+
+                                                                </h2>
+
+                                                            </div>
+
+                                                        </div>
+
+
+                                                        <% if ( session.SessionParticipants &&
+                                                            session.SessionParticipants.length> 0
+                                                            ) { %>
+
+
+                                                            <div class="participant-grid">
+
+
+                                                                <% session.SessionParticipants.forEach( (participant,
+                                                                    index)=> {
+                                                                    %>
+
+
+                                                                    <div class="participant-card">
+
+
+                                                                        <div class="participant-avatar">
+
+                                                                            <%= participant.User.name .charAt(0)
+                                                                                .toUpperCase() %>
+
+                                                                        </div>
+
+
+                                                                        <div class="participant-info">
+
+                                                                            <strong>
+                                                                                <%= participant.User.name %>
+                                                                            </strong>
+
+                                                                            <span>
+                                                                                Player <%= index + 1 %>
+                                                                            </span>
+
+                                                                        </div>
+
+
+                                                                        <span class="participant-check">
+                                                                            ✓
                                                                         </span>
 
+
                                                                     </div>
 
 
-                                                                    <span class="participant-check">
-                                                                        ✓
-                                                                    </span>
+                                                                    <% }) %>
+
+
+                                                            </div>
+
+
+                                                            <% } else { %>
+
+
+                                                                <div class="empty-players">
+
+
+                                                                    <div class="empty-players-icon">
+                                                                        👥
+                                                                    </div>
+
+
+                                                                    <div>
+
+                                                                        <strong>
+                                                                            No players yet
+                                                                        </strong>
+
+                                                                        <p>
+                                                                            Be the first player to join
+                                                                            this session.
+                                                                        </p>
+
+                                                                    </div>
 
 
                                                                 </div>
 
 
-                                                                <% }) %>
+                                                                <% } %>
 
 
-                                                        </div>
+                                                    </div>
+
+
+                                        </section>
+
+
+                                        <!-- RIGHT SIDEBAR -->
+
+                                        <aside class="session-sidebar">
+
+
+                                            <!-- JOIN SESSION -->
+
+                                            <% if (session.status==="scheduled" ) { %>
+
+
+                                                <div class="join-card">
+
+
+                                                    <div class="join-card-top">
+
+                                                        <span class="join-label">
+                                                            READY TO PLAY?
+                                                        </span>
+
+
+                                                        <h2>
+                                                            Join this session
+                                                        </h2>
+
+
+                                                        <p>
+                                                            Secure your spot before all available
+                                                            places are filled.
+                                                        </p>
+
+                                                    </div>
+
+
+                                                    <div class="spots-display">
+
+                                                        <strong>
+                                                            <%= session.additionalPlayersNeeded %>
+                                                        </strong>
+
+
+                                                        <span>
+
+                                                            <%= session.additionalPlayersNeeded===1 ? "spot" : "spots"
+                                                                %>
+
+                                                                remaining
+
+                                                        </span>
+
+                                                    </div>
+
+
+                                                    <% if (session.additionalPlayersNeeded> 0) { %>
+
+
+                                                        <form action="/sessions/<%= session.id %>/join" method="POST">
+
+                                                            <button type="submit" class="join-button">
+
+                                                                Join session
+
+                                                                <span>
+                                                                    →
+                                                                </span>
+
+                                                            </button>
+
+                                                        </form>
 
 
                                                         <% } else { %>
 
 
-                                                            <div class="empty-players">
+                                                            <button type="button" class="join-button join-disabled"
+                                                                disabled>
+                                                                Session full
+                                                            </button>
 
 
-                                                                <div class="empty-players-icon">
-                                                                    👥
+                                                            <% } %>
+
+
+                                                                <p class="join-note">
+                                                                    You can only join a session once.
+                                                                </p>
+
+
+                                                </div>
+
+
+                                                <% } %>
+
+
+                                                    <!-- CANCEL SESSION -->
+
+                                                    <% if ( session.status==="scheduled" && session.createdBy===user.id
+                                                        && new Date(session.sessionDate)> new Date()
+                                                        ) { %>
+
+
+                                                        <div class="join-card">
+
+
+                                                            <div class="join-card-top">
+
+                                                                <span class="join-label">
+                                                                    SESSION MANAGEMENT
+                                                                </span>
+
+
+                                                                <h2>
+                                                                    Cancel session
+                                                                </h2>
+
+
+                                                                <p>
+                                                                    Cancelling will make this session
+                                                                    unavailable to all players.
+                                                                </p>
+
+                                                            </div>
+
+
+                                                            <form action="/sessions/<%= session.id %>/cancel"
+                                                                method="POST"
+                                                                onsubmit="return confirm('Are you sure you want to cancel this session?');">
+
+
+                                                                <div style="margin-bottom: 16px;">
+
+                                                                    <label for="cancellationReason"
+                                                                        style="display: block; margin-bottom: 8px;">
+                                                                        Cancellation reason
+                                                                    </label>
+
+
+                                                                    <textarea id="cancellationReason"
+                                                                        name="cancellationReason" rows="4" required
+                                                                        placeholder="Enter the reason for cancelling this session..."
+                                                                        style="width: 100%; box-sizing: border-box; padding: 10px; resize: vertical;"></textarea>
+
                                                                 </div>
+
+
+                                                                <button type="submit" class="join-button">
+                                                                    Cancel session
+                                                                </button>
+
+
+                                                            </form>
+
+
+                                                        </div>
+
+
+                                                        <% } %>
+
+
+                                                            <!-- SIDEBAR NOTE -->
+
+                                                            <div class="sidebar-note">
+
+                                                                <span>
+                                                                    💡
+                                                                </span>
 
 
                                                                 <div>
 
                                                                     <strong>
-                                                                        No players yet
+                                                                        Good to know
                                                                     </strong>
 
+
                                                                     <p>
-                                                                        Be the first player to join
-                                                                        this session.
+
+                                                                        <% if (session.status==="cancelled" ) { %>
+
+                                                                            This session has been cancelled.
+
+                                                                            <% } else { %>
+
+                                                                                Sessions cannot be joined after
+                                                                                their scheduled time.
+
+                                                                                <% } %>
+
                                                                     </p>
 
                                                                 </div>
 
-
                                                             </div>
 
 
-                                                            <% } %>
+                                        </aside>
 
 
-                                                </div>
+                                    </div>
 
+                </div>
 
-                                    </section>
-
-
-                                    <!-- RIGHT SIDEBAR -->
-
-                                    <aside class="session-sidebar">
-
-
-                                        <!-- JOIN SESSION -->
-
-                                        <% if (session.status==="scheduled" ) { %>
-
-
-                                            <div class="join-card">
-
-
-                                                <div class="join-card-top">
-
-                                                    <span class="join-label">
-                                                        READY TO PLAY?
-                                                    </span>
-
-
-                                                    <h2>
-                                                        Join this session
-                                                    </h2>
-
-
-                                                    <p>
-                                                        Secure your spot before all available
-                                                        places are filled.
-                                                    </p>
-
-                                                </div>
-
-
-                                                <div class="spots-display">
-
-                                                    <strong>
-                                                        <%= session.additionalPlayersNeeded %>
-                                                    </strong>
-
-
-                                                    <span>
-
-                                                        <%= session.additionalPlayersNeeded===1 ? "spot" : "spots" %>
-
-                                                            remaining
-
-                                                    </span>
-
-                                                </div>
-
-
-                                                <% if (session.additionalPlayersNeeded> 0) { %>
-
-
-                                                    <form action="/sessions/<%= session.id %>/join" method="POST">
-
-                                                        <button type="submit" class="join-button">
-
-                                                            Join session
-
-                                                            <span>
-                                                                →
-                                                            </span>
-
-                                                        </button>
-
-                                                    </form>
-
-
-                                                    <% } else { %>
-
-
-                                                        <button type="button" class="join-button join-disabled"
-                                                            disabled>
-                                                            Session full
-                                                        </button>
-
-
-                                                        <% } %>
-
-
-                                                            <p class="join-note">
-                                                                You can only join a session once.
-                                                            </p>
-
-
-                                            </div>
-
-
-                                            <% } %>
-
-
-                                                <!-- CANCEL SESSION -->
-
-                                                <% if ( session.status==="scheduled" && session.createdBy===user.id &&
-                                                    new Date(session.sessionDate)> new Date()
-                                                    ) { %>
-
-
-                                                    <div class="join-card">
-
-
-                                                        <div class="join-card-top">
-
-                                                            <span class="join-label">
-                                                                SESSION MANAGEMENT
-                                                            </span>
-
-
-                                                            <h2>
-                                                                Cancel session
-                                                            </h2>
-
-
-                                                            <p>
-                                                                Cancelling will make this session
-                                                                unavailable to all players.
-                                                            </p>
-
-                                                        </div>
-
-
-                                                        <form action="/sessions/<%= session.id %>/cancel" method="POST"
-                                                            onsubmit="return confirm('Are you sure you want to cancel this session?');">
-
-
-                                                            <div style="margin-bottom: 16px;">
-
-                                                                <label for="cancellationReason"
-                                                                    style="display: block; margin-bottom: 8px;">
-                                                                    Cancellation reason
-                                                                </label>
-
-
-                                                                <textarea id="cancellationReason"
-                                                                    name="cancellationReason" rows="4" required
-                                                                    placeholder="Enter the reason for cancelling this session..."
-                                                                    style="width: 100%; box-sizing: border-box; padding: 10px; resize: vertical;"></textarea>
-
-                                                            </div>
-
-
-                                                            <button type="submit" class="join-button">
-                                                                Cancel session
-                                                            </button>
-
-
-                                                        </form>
-
-
-                                                    </div>
-
-
-                                                    <% } %>
-
-
-                                                        <!-- SIDEBAR NOTE -->
-
-                                                        <div class="sidebar-note">
-
-                                                            <span>
-                                                                💡
-                                                            </span>
-
-
-                                                            <div>
-
-                                                                <strong>
-                                                                    Good to know
-                                                                </strong>
-
-
-                                                                <p>
-
-                                                                    <% if (session.status==="cancelled" ) { %>
-
-                                                                        This session has been cancelled.
-
-                                                                        <% } else { %>
-
-                                                                            Sessions cannot be joined after
-                                                                            their scheduled time.
-
-                                                                            <% } %>
-
-                                                                </p>
-
-                                                            </div>
-
-                                                        </div>
-
-
-                                    </aside>
-
-
-                                </div>
-
-            </div>
-
-        </main>
+            </main>
 
     </div>
 
