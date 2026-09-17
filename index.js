@@ -46,8 +46,33 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/", (req, res) => {
-    res.render("home");
+app.get("/", async (req, res) => {
+    try {
+        const upcomingSessions = await Session.findAll({
+            where: {
+                status: "scheduled",
+                sessionDate: {
+                    [Op.gt]: new Date(),
+                },
+            },
+            include: [
+                {
+                    model: Sport,
+                },
+            ],
+            order: [["sessionDate", "ASC"]],
+            limit: 3,
+        });
+
+        res.render("home", {
+            upcomingSessions,
+        });
+    } catch (error) {
+        console.error("Landing page error:", error);
+        res.render("home", {
+            upcomingSessions: [],
+        });
+    }
 });
 
 app.get("/dashboard", async (req, res) => {

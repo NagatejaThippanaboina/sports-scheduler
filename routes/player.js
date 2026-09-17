@@ -382,6 +382,32 @@ router.post(
 
 
             // -----------------------------------------
+            // TIME CONFLICT CHECK
+            // -----------------------------------------
+
+            const userParticipants = await SessionParticipant.findAll({
+                where: { userId: req.user.id },
+                include: [{ model: Session }],
+            });
+
+            const hasTimeConflict = userParticipants.some(p =>
+                p.Session &&
+                p.Session.status === "scheduled" &&
+                p.Session.id !== session.id &&
+                new Date(p.Session.sessionDate).getTime() === new Date(session.sessionDate).getTime()
+            );
+
+            if (hasTimeConflict) {
+                req.flash(
+                    "error",
+                    "Conflict detected: You already have another session scheduled at this date and time."
+                );
+
+                return res.redirect("/dashboard");
+            }
+
+
+            // -----------------------------------------
             // SESSION FULL?
             // -----------------------------------------
 

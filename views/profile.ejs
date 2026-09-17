@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Profile | Sports Scheduler</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bg-gray-50">
+    <div class="player-dashboard">
+        <header class="player-topbar">
+            <div class="player-brand">
+                <a href="<%= user.role === 'admin' ? '/admin/dashboard' : '/dashboard' %>"
+                    style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                    <div class="player-brand-mark">S</div>
+                    <span>Sports Scheduler</span>
+                </a>
+            </div>
+
+            <div class="player-topbar-actions">
+                <a href="<%= user.role === 'admin' ? '/admin/dashboard' : '/dashboard' %>"
+                    class="btn btn-secondary btn-small">Dashboard</a>
+                <a href="/profile" class="btn btn-secondary btn-small"
+                    style="background: var(--primary); color: white;">Profile</a>
+                <form action="/logout" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-secondary btn-small">Logout</button>
+                </form>
+            </div>
+        </header>
+
+        <main class="player-main" style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+            <div class="player-section-header" style="margin-bottom: 30px;">
+                <div>
+                    <span class="player-section-eyebrow">ACCOUNT</span>
+                    <h2>User Profile & Security</h2>
+                    <p>Manage your account settings and update your security credentials.</p>
+                </div>
+            </div>
+
+            <% if (messages.error && messages.error.length> 0) { %>
+                <div
+                    style="margin-bottom: 20px; padding: 14px 18px; background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 8px; color: #991b1b; font-size: 14px; font-weight: 500;">
+                    <%= messages.error[0] %>
+                </div>
+                <% } %>
+
+                    <% if (messages.success && messages.success.length> 0) { %>
+                        <div
+                            style="margin-bottom: 20px; padding: 14px 18px; background: #f0fdf4; border-left: 4px solid #22c55e; border-radius: 8px; color: #166534; font-size: 14px; font-weight: 500;">
+                            <%= messages.success[0] %>
+                        </div>
+                        <% } %>
+
+                            <!-- PROFILE INFO CARD -->
+                            <div
+                                style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 24px; margin-bottom: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                                <h3
+                                    style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--text-dark);">
+                                    Account Information</h3>
+                                <div
+                                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                                    <div>
+                                        <span
+                                            style="font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Full
+                                            Name</span>
+                                        <div
+                                            style="font-size: 16px; font-weight: 600; color: var(--text-dark); margin-top: 4px;">
+                                            <%= user.name %>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span
+                                            style="font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Email
+                                            Address</span>
+                                        <div
+                                            style="font-size: 16px; font-weight: 600; color: var(--text-dark); margin-top: 4px;">
+                                            <%= user.email %>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span
+                                            style="font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Role</span>
+                                        <div style="margin-top: 4px;">
+                                            <span class="badge"
+                                                style="background: <%= user.role === 'admin' ? '#dbeafe' : '#e0e7ff' %>; color: <%= user.role === 'admin' ? '#1e40af' : '#3730a3' %>; text-transform: capitalize;">
+                                                <%= user.role %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CHANGE PASSWORD CARD -->
+                            <div
+                                style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                                <h3
+                                    style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--text-dark);">
+                                    Change Password</h3>
+                                <form action="/profile/change-password" method="POST"
+                                    style="display: flex; flex-direction: column; gap: 16px;">
+                                    <div>
+                                        <label for="currentPassword"
+                                            style="display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 6px;">Current
+                                            Password</label>
+                                        <input type="password" id="currentPassword" name="currentPassword" required
+                                            class="form-control" placeholder="Enter your current password"
+                                            style="width: 100%; height: 42px; padding: 0 12px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                                    </div>
+
+                                    <div>
+                                        <label for="newPassword"
+                                            style="display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 6px;">New
+                                            Password</label>
+                                        <input type="password" id="newPassword" name="newPassword" required
+                                            class="form-control" placeholder="Enter at least 6 characters"
+                                            style="width: 100%; height: 42px; padding: 0 12px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                                    </div>
+
+                                    <div>
+                                        <label for="confirmPassword"
+                                            style="display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 6px;">Confirm
+                                            New Password</label>
+                                        <input type="password" id="confirmPassword" name="confirmPassword" required
+                                            class="form-control" placeholder="Re-enter your new password"
+                                            style="width: 100%; height: 42px; padding: 0 12px; border-radius: 8px; border: 1px solid #cbd5e1;">
+                                    </div>
+
+                                    <div style="margin-top: 8px;">
+                                        <button type="submit" class="btn btn-primary"
+                                            style="padding: 10px 24px; font-weight: 600;">Update Password</button>
+                                    </div>
+                                </form>
+                            </div>
+        </main>
+    </div>
+</body>
+
+</html>

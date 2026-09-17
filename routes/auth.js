@@ -68,6 +68,8 @@ router.post(
     }
 );
 
+const { requireAuth } = require("../middleware/auth");
+
 // ===============================
 // LOGOUT
 // ===============================
@@ -82,6 +84,58 @@ router.post("/logout", (req, res, next) => {
             res.redirect("/");
         });
     });
+});
+
+// ===============================
+// USER PROFILE & PASSWORD CHANGE
+// ===============================
+
+router.get("/profile", requireAuth, (req, res) => {
+    res.render("profile", {
+        user: req.user,
+        messages: req.flash(),
+    });
+});
+
+router.post("/profile/change-password", requireAuth, async (req, res) => {
+    try {
+        const { currentPassword, newPassword, confirmPassword } = req.body;
+
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            req.flash("error", "Please fill in all password fields.");
+            return res.redirect("/profile");
+        }
+
+        if (newPassword !== confirmPassword) {
+            req.flash("error", "New password and confirmation password do not match.");
+            return res.redirect("/profile");
+        }
+
+        if (newPassword.length < 6) {
+            req.flash("error", "New password must be at least 6 characters long.");
+            return res.redirect("/profile");
+        }
+
+        const user = await User.findByPk(req.user.id);
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+
+        if (!isMatch) {
+            req.flash("error", "Incorrect current password.");
+            return res.redirect("/profile");
+        }
+
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+
+        req.flash("success", "Your password has been changed successfully.");
+        res.redirect("/profile");
+
+    } catch (error) {
+        console.error("Change Password Error:", error);
+        req.flash("error", "An error occurred while updating your password.");
+        res.redirect("/profile");
+    }
 });
 
 module.exports = router;
