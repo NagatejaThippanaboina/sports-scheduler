@@ -149,11 +149,33 @@ router.post("/sessions", requireAuth, async (req, res) => {
 
 
         // ---------------------------------------------
-        // CHECK CREATOR PARTICIPATION
+        // CHECK CREATOR PARTICIPATION & CONFLICTS
         // ---------------------------------------------
 
         const isCreatorParticipating =
             creatorParticipating === "yes";
+
+        if (isCreatorParticipating) {
+            const userParticipants = await SessionParticipant.findAll({
+                where: { userId: req.user.id },
+                include: [{ model: Session }],
+            });
+
+            const hasTimeConflict = userParticipants.some(p =>
+                p.Session &&
+                p.Session.status === "scheduled" &&
+                new Date(p.Session.sessionDate).getTime() === selectedDate.getTime()
+            );
+
+            if (hasTimeConflict) {
+                req.flash(
+                    "error",
+                    "You cannot participate in this new session because you already have another session scheduled at this date and time."
+                );
+
+                return res.redirect("/sessions/new");
+            }
+        }
 
 
         // ---------------------------------------------
