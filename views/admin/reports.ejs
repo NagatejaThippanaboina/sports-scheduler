@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Reports | Sports Scheduler</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="page">
+        <!-- TOP NAVIGATION -->
+        <header class="topbar">
+            <div class="container topbar-inner">
+                <a href="/admin/dashboard" class="brand">
+                    <div class="brand-mark">S</div>
+                    <div class="brand-text">
+                        <span class="brand-name">Sports Scheduler</span>
+                        <span class="brand-subtitle">Admin Console</span>
+                    </div>
+                </a>
+
+                <div class="nav-actions">
+                    <a href="/admin/dashboard" class="btn btn-secondary btn-small" style="margin-right: 12px;">← Back to Dashboard</a>
+                    <div class="user-chip">
+                        <div class="user-avatar"><%= user.name.charAt(0).toUpperCase() %></div>
+                        <span><%= user.name %></span>
+                    </div>
+                    <form action="/logout" method="POST" class="logout-form">
+                        <button type="submit" class="logout-button">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="container">
+            <!-- PAGE HEADER -->
+            <section class="page-header">
+                <div class="page-header-content">
+                    <div>
+                        <p class="eyebrow">Analytics & Performance</p>
+                        <h1 class="page-title">Admin Reports</h1>
+                        <p class="page-description">
+                            Track sports engagement, session volume, and popularity trends across configurable timeframes.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DATE FILTER PANEL -->
+            <section class="action-panel" style="margin-bottom: 24px;">
+                <form action="/admin/reports" method="GET" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; width: 100%;">
+                    <div class="form-group" style="flex: 1; min-width: 200px;">
+                        <label for="startDate" class="form-label">Start Date</label>
+                        <input type="date" id="startDate" name="startDate" value="<%= startDate %>" class="form-control" required>
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 200px;">
+                        <label for="endDate" class="form-label">End Date</label>
+                        <input type="date" id="endDate" name="endDate" value="<%= endDate %>" class="form-control" required>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="submit" class="btn btn-primary" style="height: 44px;">Filter Report</button>
+                        <a href="/admin/reports" class="btn btn-secondary" style="height: 44px; display: flex; align-items: center;">Reset</a>
+                    </div>
+                </form>
+            </section>
+
+            <% if (dateError) { %>
+                <div class="flash-message flash-error" style="margin-bottom: 24px;">
+                    <strong>⚠ Invalid Date Range</strong>
+                    <span><%= dateError %></span>
+                </div>
+            <% } %>
+
+            <!-- STATS OVERVIEW GRID -->
+            <section class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Total Sessions</span>
+                        <div class="stat-icon">📊</div>
+                    </div>
+                    <div class="stat-value"><%= totalSessions %></div>
+                    <div style="font-size: 12px; color: var(--text-soft); margin-top: 4px;">In selected period</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Completed / Played</span>
+                        <div class="stat-icon">⚽</div>
+                    </div>
+                    <div class="stat-value" style="color: var(--success);"><%= completedCount %></div>
+                    <div style="font-size: 12px; color: var(--text-soft); margin-top: 4px;">Played sessions</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Scheduled Upcoming</span>
+                        <div class="stat-icon">📅</div>
+                    </div>
+                    <div class="stat-value" style="color: var(--primary);"><%= scheduledCount %></div>
+                    <div style="font-size: 12px; color: var(--text-soft); margin-top: 4px;">Upcoming games</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Cancelled Sessions</span>
+                        <div class="stat-icon">🚫</div>
+                    </div>
+                    <div class="stat-value" style="color: var(--warning);"><%= cancelledCount %></div>
+                    <div style="font-size: 12px; color: var(--text-soft); margin-top: 4px;">Cancelled games</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-label">Players Joined</span>
+                        <div class="stat-icon">👥</div>
+                    </div>
+                    <div class="stat-value"><%= totalJoinedParticipants %></div>
+                    <div style="font-size: 12px; color: var(--text-soft); margin-top: 4px;">Player participations</div>
+                </div>
+            </section>
+
+            <!-- SPORT POPULARITY SECTION -->
+            <section class="section">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">Relative Sport Popularity</h2>
+                        <p class="section-subtitle">Breakdown of session counts and player participation per sport.</p>
+                    </div>
+                </div>
+
+                <% if (!sportPopularity || sportPopularity.length === 0 || totalSessions === 0) { %>
+                    <div class="empty-state">
+                        <div class="empty-icon">📈</div>
+                        <h3 class="empty-title">No data for selected period</h3>
+                        <p class="empty-description">Try adjusting your start and end dates above to include sessions.</p>
+                    </div>
+                <% } else { %>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+                        <% sportPopularity.forEach(sport => { %>
+                            <div class="card" style="padding: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div class="sport-icon" style="width: 36px; height: 36px; font-size: 16px;">🏆</div>
+                                        <h3 style="margin: 0; font-size: 17px; font-weight: 800;"><%= sport.sportName %></h3>
+                                    </div>
+                                    <span class="badge badge-success"><%= sport.sessionCount %> <%= sport.sessionCount === 1 ? 'session' : 'sessions' %></span>
+                                </div>
+
+                                <div style="margin-bottom: 14px;">
+                                    <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 4px;">
+                                        <span>Share of Total Sessions</span>
+                                        <span><%= sport.sessionPercentage %>%</span>
+                                    </div>
+                                    <div style="width: 100%; background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden;">
+                                        <div style="width: <%= sport.sessionPercentage %>%; background: var(--primary); height: 100%; border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 4px;">
+                                        <span>Share of Joined Players (<%= sport.participantCount %> players)</span>
+                                        <span><%= sport.participantPercentage %>%</span>
+                                    </div>
+                                    <div style="width: 100%; background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden;">
+                                        <div style="width: <%= sport.participantPercentage %>%; background: #10b981; height: 100%; border-radius: 4px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } %>
+            </section>
+
+            <!-- DETAILED SESSION PERIOD REPORT TABLE -->
+            <section class="section">
+                <div class="section-header">
+                    <div>
+                        <h2 class="section-title">Session Details Log</h2>
+                        <p class="section-subtitle">Sessions scheduled between <%= startDate %> and <%= endDate %></p>
+                    </div>
+                </div>
+
+                <% if (sessions && sessions.length > 0) { %>
+                    <div class="card" style="padding: 0; overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                            <thead>
+                                <tr style="background: var(--surface-soft); border-bottom: 1px solid var(--border);">
+                                    <th style="padding: 14px 18px; font-size: 12px; text-transform: uppercase; color: var(--text-soft);">Date & Time</th>
+                                    <th style="padding: 14px 18px; font-size: 12px; text-transform: uppercase; color: var(--text-soft);">Sport</th>
+                                    <th style="padding: 14px 18px; font-size: 12px; text-transform: uppercase; color: var(--text-soft);">Venue</th>
+                                    <th style="padding: 14px 18px; font-size: 12px; text-transform: uppercase; color: var(--text-soft);">Joined Players</th>
+                                    <th style="padding: 14px 18px; font-size: 12px; text-transform: uppercase; color: var(--text-soft);">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% sessions.forEach(session => { %>
+                                    <tr style="border-bottom: 1px solid var(--border);">
+                                        <td style="padding: 14px 18px; font-weight: 600;">
+                                            <%= new Date(session.sessionDate).toLocaleString() %>
+                                        </td>
+                                        <td style="padding: 14px 18px;">
+                                            <strong><%= session.Sport ? session.Sport.name : 'Unknown' %></strong>
+                                        </td>
+                                        <td style="padding: 14px 18px; color: var(--text-soft);"><%= session.venue %></td>
+                                        <td style="padding: 14px 18px;">
+                                            <%= session.SessionParticipants ? session.SessionParticipants.length : 0 %> joined
+                                            (<%= session.additionalPlayersNeeded %> needed)
+                                        </td>
+                                        <td style="padding: 14px 18px;">
+                                            <% if (session.status === "scheduled") { %>
+                                                <span class="badge badge-success">Scheduled</span>
+                                            <% } else if (session.status === "cancelled") { %>
+                                                <span class="badge badge-warning">Cancelled</span>
+                                            <% } else { %>
+                                                <span class="badge badge-success">Completed</span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <h3 class="empty-title">No sessions log available</h3>
+                        <p class="empty-description">No sessions match the selected date range.</p>
+                    </div>
+                <% } %>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

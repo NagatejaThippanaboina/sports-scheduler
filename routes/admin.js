@@ -1,4 +1,5 @@
 const express = require("express");
+const { Op } = require("sequelize");
 
 const {
     Sport,
@@ -540,6 +541,176 @@ router.post(
 
     }
 );
+
+
+// =========================================================
+// ADMIN REPORTS
+// =========================================================
+
+router.get("/admin/reports", requireAdmin, async (req, res) => {
+    try {
+        let { startDate, endDate } = req.query;
+
+        const today = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(today.getDate() - 30);
+        const thirtyDaysAhead = new Date();
+        thirtyDaysAhead.setDate(today.getDate() + 30);
+
+        const formatDateStr = (d) => d.toISOString().split("T")[0];
+
+        if (!startDate) {
+            startDate = formatDateStr(thirtyDaysAgo);
+        }
+        if (!endDate) {
+            endDate = formatDateStr(thirtyDaysAhead);
+        }
+
+        const startParsed = new Date(`${startDate}T00:00:00.000Z`);
+        const endParsed = new Date(`${endDate}T23:59:59.999Z`);
+
+        let dateError = null;
+        if (isNaN(startParsed.getTime()) || isNaN(endParsed.getTime())) {
+            dateError = "Invalid date format provided. Please use valid YYYY-MM-DD dates.";
+        } else if (startParsed > endParsed) {
+            dateError = "Start date must be before or equal to end date.";
+        }
+
+        if (dateError) {
+            return res.render("admin/reports", {
+                user: req.user,
+                startDate,
+                endDate,
+                dateError,
+                totalSessions: 0,
+                scheduledCount: 0,
+                cancelledCount: 0,
+                completedCount: 0,
+                totalJoinedParticipants: 0,
+                totalPlayersNeeded: 0,
+                sportPopularity: [],
+                allSports: [],
+                sessions: [],
+            });
+        }
+
+        const allSports = await Sport.findAll({
+            order: [["name", "ASC"]],
+        });
+
+        const sessions = await Session.findAll({
+            where: {
+                sessionDate: {
+                    [Op.between]: [startParsed, endParsed],
+                },
+            },
+            include: [
+                {
+                    model: Sport,
+                },
+                {
+                    model: SessionParticipant,
+                    include: [{ model: User }],
+                },
+            ],
+            order: [["sessionDate", "ASC"]],
+        });
+
+        const totalSessions = sessions.length;
+        let scheduledCount = 0;
+        let cancelledCount = 0;
+        let completedCount = 0;
+        let totalJoinedParticipants = 0;
+        let totalPlayersNeeded = 0;
+
+        const sportStatsMap = {};
+
+        allSports.forEach((sport) => {
+            sportStatsMap[sport.id] = {
+                sportId: sport.id,
+                sportName: sport.name,
+                sessionCount: 0,
+                participantCount: 0,
+                scheduledCount: 0,
+                cancelledCount: 0,
+                completedCount: 0,
+            };
+        });
+
+        const now = new Date();
+
+        sessions.forEach((sess) => {
+            const joinedCount = sess.SessionParticipants ? sess.SessionParticipants.length : 0;
+            totalJoinedParticipants += joinedCount;
+            totalPlayersNeeded += Number(sess.additionalPlayersNeeded || 0);
+
+            const sessDate = new Date(sess.sessionDate);
+            const isPast = sessDate < now;
+
+            if (sess.status === "cancelled") {
+                cancelledCount++;
+            } else if (sess.status === "completed" || isPast) {
+                completedCount++;
+            } else {
+                scheduledCount++;
+            }
+
+            if (sess.Sport) {
+                const sId = sess.Sport.id;
+                if (!sportStatsMap[sId]) {
+                    sportStatsMap[sId] = {
+                        sportId: sId,
+                        sportName: sess.Sport.name,
+                        sessionCount: 0,
+                        participantCount: 0,
+                        scheduledCount: 0,
+                        cancelledCount: 0,
+                        completedCount: 0,
+                    };
+                }
+
+                sportStatsMap[sId].sessionCount++;
+                sportStatsMap[sId].participantCount += joinedCount;
+                if (sess.status === "cancelled") {
+                    sportStatsMap[sId].cancelledCount++;
+                } else if (sess.status === "completed" || isPast) {
+                    sportStatsMap[sId].completedCount++;
+                } else {
+                    sportStatsMap[sId].scheduledCount++;
+                }
+            }
+        });
+
+        const sportPopularity = Object.values(sportStatsMap).map((item) => {
+            return {
+                ...item,
+                sessionPercentage: totalSessions > 0 ? Math.round((item.sessionCount / totalSessions) * 100) : 0,
+                participantPercentage: totalJoinedParticipants > 0 ? Math.round((item.participantCount / totalJoinedParticipants) * 100) : 0,
+            };
+        });
+
+        sportPopularity.sort((a, b) => b.sessionCount - a.sessionCount || b.participantCount - a.participantCount);
+
+        res.render("admin/reports", {
+            user: req.user,
+            startDate,
+            endDate,
+            dateError: null,
+            totalSessions,
+            scheduledCount,
+            cancelledCount,
+            completedCount,
+            totalJoinedParticipants,
+            totalPlayersNeeded,
+            sportPopularity,
+            allSports,
+            sessions,
+        });
+    } catch (error) {
+        console.error("Error loading admin reports:", error);
+        res.status(500).send("Something went wrong loading reports.");
+    }
+});
 
 
 module.exports = router;
