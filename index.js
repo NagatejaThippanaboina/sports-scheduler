@@ -60,6 +60,17 @@ app.get("/dashboard", async (req, res) => {
     }
 
     try {
+        const page = Math.max(1, parseInt(req.query.page) || 1);
+        const limit = Math.max(1, parseInt(req.query.limit) || 6);
+        const offset = (page - 1) * limit;
+
+        const selectedSportId = req.query.sportId || "";
+        const selectedStatus = req.query.status || "scheduled";
+
+        const allSports = await Sport.findAll({
+            order: [["name", "ASC"]],
+        });
+
         const joinedParticipants = await SessionParticipant.findAll({
             where: {
                 userId: req.user.id,
@@ -70,12 +81,21 @@ app.get("/dashboard", async (req, res) => {
             (participant) => participant.sessionId
         );
 
-        const availableWhere = {
-            status: "scheduled",
-            sessionDate: {
+        const availableWhere = {};
+
+        if (selectedStatus && selectedStatus !== "all") {
+            availableWhere.status = selectedStatus;
+        }
+
+        if (selectedStatus === "scheduled") {
+            availableWhere.sessionDate = {
                 [Op.gt]: new Date(),
-            },
-        };
+            };
+        }
+
+        if (selectedSportId) {
+            availableWhere.sportId = selectedSportId;
+        }
 
         if (joinedSessionIds.length > 0) {
             availableWhere.id = {
@@ -83,7 +103,7 @@ app.get("/dashboard", async (req, res) => {
             };
         }
 
-        const availableSessions = await Session.findAll({
+        const { count: totalAvailableCount, rows: availableSessions } = await Session.findAndCountAll({
             where: availableWhere,
             include: [
                 {
@@ -99,7 +119,12 @@ app.get("/dashboard", async (req, res) => {
                 },
             ],
             order: [["sessionDate", "ASC"]],
+            limit,
+            offset,
+            distinct: true,
         });
+
+        const totalPages = Math.ceil(totalAvailableCount / limit) || 1;
 
         const joinedSessions = await Session.findAll({
             where: {
@@ -150,6 +175,12 @@ app.get("/dashboard", async (req, res) => {
             sessions: availableSessions,
             joinedSessions,
             mySessions,
+            allSports,
+            selectedSportId,
+            selectedStatus,
+            page,
+            totalPages,
+            totalAvailableCount,
         });
 
     } catch (error) {

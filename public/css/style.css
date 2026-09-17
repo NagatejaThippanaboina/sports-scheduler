@@ -1023,12 +1023,22 @@ textarea.form-control {
    ========================================================= */
 
 .auth-page {
-    min-height: 100vh;
+    min-height: calc(100vh - 80px);
 
-    display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px 20px;
 
     background: var(--bg);
+}
+
+.auth-page:has(.auth-brand-panel) {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    padding: 0;
 }
 
 /* =========================================================
