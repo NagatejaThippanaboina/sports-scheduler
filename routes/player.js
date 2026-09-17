@@ -270,6 +270,8 @@ router.get(
                 {
                     session,
                     user: req.user,
+                    errorMessages: req.flash("error"),
+                    successMessages: req.flash("success"),
                 }
             );
 
