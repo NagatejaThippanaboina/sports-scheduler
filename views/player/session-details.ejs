@@ -166,7 +166,13 @@
                                                         </span>
 
                                                         <strong>
-                                                            <%= new Date(session.sessionDate).toLocaleString() %>
+                                                            <%= new Date(session.sessionDate).toLocaleString("en-IN", {
+                                                                year: "numeric",
+                                                                month: "numeric",
+                                                                day: "numeric",
+                                                                hour: "numeric",
+                                                                minute: "2-digit"
+                                                            }) %>
                                                         </strong>
 
                                                     </div>

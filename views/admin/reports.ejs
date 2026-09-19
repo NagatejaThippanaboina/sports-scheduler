@@ -239,7 +239,13 @@
                                             <% sessions.forEach(session=> { %>
                                                 <tr style="border-bottom: 1px solid var(--border);">
                                                     <td style="padding: 14px 18px; font-weight: 600;">
-                                                        <%= new Date(session.sessionDate).toLocaleString() %>
+                                                        <%= new Date(session.sessionDate).toLocaleString("en-IN", {
+                                                            year: "numeric",
+                                                            month: "numeric",
+                                                            day: "numeric",
+                                                            hour: "numeric",
+                                                            minute: "2-digit"
+                                                        }) %>
                                                     </td>
                                                     <td style="padding: 14px 18px;">
                                                         <strong>
