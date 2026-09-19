@@ -80,10 +80,6 @@ app.get("/dashboard", async (req, res) => {
         return res.redirect("/login");
     }
 
-    if (req.user.role === "admin") {
-        return res.redirect("/admin/dashboard");
-    }
-
     try {
         const page = Math.max(1, parseInt(req.query.page) || 1);
         const limit = Math.max(1, parseInt(req.query.limit) || 6);

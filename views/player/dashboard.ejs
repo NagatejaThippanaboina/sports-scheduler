@@ -36,6 +36,21 @@
 
                     <%- include('../partials/flash-messages') %>
 
+                    <% if (user.role === 'admin') { %>
+                        <div style="background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; padding: 14px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15); flex-wrap: wrap; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span style="font-size: 22px;">🎮</span>
+                                <div>
+                                    <strong style="font-size: 15px; display: block;">Player Mode Active (Administrator)</strong>
+                                    <span style="font-size: 13px; opacity: 0.9;">You are browsing as a player. You can discover games, join sessions, and participate in sports.</span>
+                                </div>
+                            </div>
+                            <a href="/admin/dashboard" class="btn btn-secondary btn-small" style="background: #ffffff; color: #1e3a8a; font-weight: 700; border: none; padding: 8px 16px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                                <span>⚙️</span> Return to Admin Console
+                            </a>
+                        </div>
+                    <% } %>
+
 
                                                     <!-- =================================================
                  WELCOME HEADER
@@ -371,29 +386,30 @@
                                                                             </div>
 
 
-                                                                            <div class="session-card-footer">
+                                                                            <div class="session-card-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
 
                                                                                 <div class="session-spots">
-
                                                                                     <strong>
-                                                                                        <%= session.additionalPlayersNeeded
-                                                                                            %>
+                                                                                        <%= session.additionalPlayersNeeded %>
                                                                                     </strong>
-
                                                                                     <span>
-                                                                                        <%= session.additionalPlayersNeeded===1
-                                                                                            ? "spot left" : "spots left"
-                                                                                            %>
+                                                                                        <%= session.additionalPlayersNeeded===1 ? "spot left" : "spots left" %>
                                                                                     </span>
-
                                                                                 </div>
 
+                                                                                <div style="display: flex; align-items: center; gap: 8px;">
+                                                                                    <a href="/sessions/<%= session.id %>" class="btn btn-secondary btn-small" style="text-decoration: none; padding: 6px 12px; font-size: 13px;">
+                                                                                        View Details
+                                                                                    </a>
 
-                                                                                <a href="/sessions/<%= session.id %>"
-                                                                                    class="session-details-link">
-                                                                                    View details
-                                                                                    <span>→</span>
-                                                                                </a>
+                                                                                    <% if (session.status === "scheduled" && new Date(session.sessionDate) > new Date() && session.additionalPlayersNeeded > 0) { %>
+                                                                                        <form action="/sessions/<%= session.id %>/join" method="POST" style="margin: 0;">
+                                                                                            <button type="submit" class="btn btn-primary btn-small" style="padding: 6px 14px; font-size: 13px; font-weight: 600;">
+                                                                                                Join Session
+                                                                                            </button>
+                                                                                        </form>
+                                                                                    <% } %>
+                                                                                </div>
 
                                                                             </div>
 

@@ -87,6 +87,10 @@
 
                                     <div class="action-panel-buttons">
 
+                                        <a href="/dashboard" class="btn btn-secondary">
+                                            🎮 Player Mode
+                                        </a>
+
                                         <a href="/admin/reports" class="btn btn-secondary">
                                             📊 View Reports
                                         </a>
@@ -553,56 +557,58 @@
 
                                                                             <!-- SESSION FOOTER -->
 
-                                                                            <div class="session-footer">
+                                                                            <div class="session-footer" style="display: flex; flex-direction: column; gap: 12px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #f1f5f9;">
 
-                                                                                <span class="session-label">
-                                                                                    Created by you
-                                                                                </span>
+                                                                                <%
+                                                                                    const isCreator = session.createdBy === user.id;
+                                                                                    const isParticipating = session.SessionParticipants && session.SessionParticipants.some(p => p.userId === user.id);
+                                                                                    const isPast = new Date(session.sessionDate) < new Date();
+                                                                                    const isJoinable = session.status === "scheduled" && !isPast && !isParticipating && session.additionalPlayersNeeded > 0;
+                                                                                %>
 
+                                                                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                                                                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                                                                        <span style="font-size: 12px; color: #64748b; font-weight: 500;">
+                                                                                            Organized by: <strong style="color: #1e293b;"><%= isCreator ? "You" : (session.User ? session.User.name : "User #" + session.createdBy) %></strong>
+                                                                                        </span>
+                                                                                        <% if (isParticipating) { %>
+                                                                                            <span class="badge" style="background: #dcfce7; color: #15803d; font-weight: 700; font-size: 11px;">
+                                                                                                ✓ You're playing
+                                                                                            </span>
+                                                                                        <% } %>
+                                                                                    </div>
 
-                                                                                <% if (session.status==="scheduled" ) {
-                                                                                    %>
+                                                                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                                                                        <a href="/sessions/<%= session.id %>" class="btn btn-secondary btn-small" style="font-size: 12px; padding: 6px 12px; text-decoration: none;">
+                                                                                            View Details
+                                                                                        </a>
 
-                                                                                    <form
-                                                                                        action="/admin/sessions/<%= session.id %>/cancel"
-                                                                                        method="POST"
-                                                                                        style="display: flex; gap: 8px; align-items: center;"
-                                                                                        onsubmit="return confirm('Are you sure you want to cancel this session?');">
+                                                                                        <% if (isJoinable) { %>
+                                                                                            <form action="/sessions/<%= session.id %>/join" method="POST" style="margin: 0;">
+                                                                                                <button type="submit" class="btn btn-primary btn-small" style="font-size: 12px; padding: 6px 12px; font-weight: 600;">
+                                                                                                    + Join Game
+                                                                                                </button>
+                                                                                            </form>
+                                                                                        <% } %>
+                                                                                    </div>
+                                                                                </div>
 
-                                                                                        <input type="text"
-                                                                                            name="cancellationReason"
-                                                                                            placeholder="Cancellation reason"
-                                                                                            required
-                                                                                            style="padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px;">
-
-                                                                                        <button type="submit"
-                                                                                            class="btn btn-danger btn-small">
+                                                                                <% if (session.status === "scheduled") { %>
+                                                                                    <form action="/admin/sessions/<%= session.id %>/cancel" method="POST" style="display: flex; gap: 8px; align-items: center; margin-top: 4px;" onsubmit="return confirm('Are you sure you want to cancel this session?');">
+                                                                                        <input type="text" name="cancellationReason" placeholder="Cancellation reason" required style="flex: 1; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px;">
+                                                                                        <button type="submit" class="btn btn-danger btn-small" style="font-size: 12px; padding: 6px 12px; white-space: nowrap;">
                                                                                             Cancel Session
                                                                                         </button>
-
                                                                                     </form>
-
-
-                                                                                    <% } else if
-                                                                                        (session.status==="cancelled" )
-                                                                                        { %>
-
-                                                                                        <span
-                                                                                            class="badge badge-warning">
-                                                                                            Cancelled
-                                                                                        </span>
-
-
-                                                                                        <% } else if
-                                                                                            (session.status==="completed"
-                                                                                            ) { %>
-
-                                                                                            <span
-                                                                                                class="badge badge-success">
-                                                                                                Completed
-                                                                                            </span>
-
-                                                                                            <% } %>
+                                                                                <% } else if (session.status === "cancelled") { %>
+                                                                                    <span class="badge badge-warning" style="align-self: flex-start;">
+                                                                                        Cancelled
+                                                                                    </span>
+                                                                                <% } else if (session.status === "completed") { %>
+                                                                                    <span class="badge badge-success" style="align-self: flex-start;">
+                                                                                        Completed
+                                                                                    </span>
+                                                                                <% } %>
 
                                                                             </div>
 

@@ -43,6 +43,9 @@ router.get("/admin/dashboard", requireAdmin, async (req, res) => {
                     model: Sport,
                 },
                 {
+                    model: User,
+                },
+                {
                     model: SessionParticipant,
                     include: [
                         {
