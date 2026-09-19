@@ -9,6 +9,7 @@ const {
 } = require("../models");
 
 const { requireAdmin } = require("../middleware/auth");
+const { checkSessionTimeConflict } = require("../utils/conflictCheck");
 
 const router = express.Router();
 
@@ -319,9 +320,7 @@ router.post(
     "/admin/sessions",
     requireAdmin,
     async (req, res) => {
-
         try {
-
             const {
                 sportId,
                 sessionDate,
@@ -329,97 +328,94 @@ router.post(
                 teamOnePlayers,
                 teamTwoPlayers,
                 additionalPlayersNeeded,
+                creatorParticipating,
             } = req.body;
-
 
             // -----------------------------------------
             // REQUIRED FIELDS
             // -----------------------------------------
-
             if (!sportId || !sessionDate || !venue) {
-
-                return res
-                    .status(400)
-                    .send(
-                        "Sport, date/time and venue are required."
-                    );
-
+                req.flash("error", "Sport, date/time and venue are required.");
+                return res.redirect("/admin/sessions/new");
             }
 
+            const selectedDate = new Date(sessionDate);
+            if (isNaN(selectedDate.getTime())) {
+                req.flash("error", "Please enter a valid date and time.");
+                return res.redirect("/admin/sessions/new");
+            }
+
+            if (selectedDate <= new Date()) {
+                req.flash("error", "The session date and time must be in the future.");
+                return res.redirect("/admin/sessions/new");
+            }
 
             // -----------------------------------------
             // CHECK SPORT
             // -----------------------------------------
-
-            const sport = await Sport.findOne({
-
-                where: {
-                    id: sportId,
-                    createdBy: req.user.id,
-                },
-
-            });
-
+            const sport = await Sport.findByPk(sportId);
 
             if (!sport) {
-
-                return res
-                    .status(403)
-                    .send(
-                        "You can only create sessions for your own sports."
-                    );
-
+                req.flash("error", "Please select a valid sport.");
+                return res.redirect("/admin/sessions/new");
             }
 
+            // -----------------------------------------
+            // CHECK CREATOR PARTICIPATION & CONFLICTS
+            // -----------------------------------------
+            const isCreatorParticipating = creatorParticipating === "yes";
+
+            if (isCreatorParticipating) {
+                const conflict = await checkSessionTimeConflict(req.user.id, selectedDate);
+
+                if (conflict.hasConflict) {
+                    req.flash(
+                        "error",
+                        "You cannot participate in this session because it overlaps with another session you're already participating in."
+                    );
+                    return res.redirect("/admin/sessions/new");
+                }
+            }
 
             // -----------------------------------------
             // CREATE SESSION
             // -----------------------------------------
-
-            await Session.create({
-
-                sportId,
-
+            const session = await Session.create({
+                sportId: Number(sportId),
                 createdBy: req.user.id,
-
-                sessionDate,
-
+                sessionDate: selectedDate,
                 venue: venue.trim(),
-
-                teamOnePlayers:
-                    teamOnePlayers || "",
-
-                teamTwoPlayers:
-                    teamTwoPlayers || "",
-
-                additionalPlayersNeeded:
-                    Number(additionalPlayersNeeded) || 0,
-
+                teamOnePlayers: teamOnePlayers ? teamOnePlayers.trim() : "",
+                teamTwoPlayers: teamTwoPlayers ? teamTwoPlayers.trim() : "",
+                additionalPlayersNeeded: Number(additionalPlayersNeeded) || 0,
                 status: "scheduled",
-
             });
 
+            // -----------------------------------------
+            // ADD PARTICIPANT RECORD IF PLAYING
+            // -----------------------------------------
+            if (isCreatorParticipating) {
+                await SessionParticipant.create({
+                    sessionId: session.id,
+                    userId: req.user.id,
+                });
+            }
 
             req.flash(
                 "success",
                 "Session created successfully."
             );
 
-
             res.redirect("/admin/dashboard");
 
         } catch (error) {
-
             console.error(error);
-
             req.flash(
                 "error",
                 "We couldn't create the session. Please try again."
             );
-
-            res.redirect("/admin/dashboard");
+            res.redirect("/admin/sessions/new");
         }
-
     }
 );
 

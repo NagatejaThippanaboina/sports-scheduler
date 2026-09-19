@@ -8,6 +8,7 @@ const {
 } = require("../models");
 
 const { requireAuth } = require("../middleware/auth");
+const { checkSessionTimeConflict } = require("../utils/conflictCheck");
 
 const router = express.Router();
 
@@ -156,21 +157,12 @@ router.post("/sessions", requireAuth, async (req, res) => {
             creatorParticipating === "yes";
 
         if (isCreatorParticipating) {
-            const userParticipants = await SessionParticipant.findAll({
-                where: { userId: req.user.id },
-                include: [{ model: Session }],
-            });
+            const conflict = await checkSessionTimeConflict(req.user.id, selectedDate);
 
-            const hasTimeConflict = userParticipants.some(p =>
-                p.Session &&
-                p.Session.status === "scheduled" &&
-                new Date(p.Session.sessionDate).getTime() === selectedDate.getTime()
-            );
-
-            if (hasTimeConflict) {
+            if (conflict.hasConflict) {
                 req.flash(
                     "error",
-                    "You cannot participate in this new session because you already have another session scheduled at this date and time."
+                    "You cannot participate in this session because it overlaps with another session you're already participating in."
                 );
 
                 return res.redirect("/sessions/new");
@@ -404,28 +396,23 @@ router.post(
 
 
             // -----------------------------------------
-            // TIME CONFLICT CHECK
+            // TIME CONFLICT CHECK (EXACT & OVERLAPPING)
             // -----------------------------------------
 
-            const userParticipants = await SessionParticipant.findAll({
-                where: { userId: req.user.id },
-                include: [{ model: Session }],
-            });
-
-            const hasTimeConflict = userParticipants.some(p =>
-                p.Session &&
-                p.Session.status === "scheduled" &&
-                p.Session.id !== session.id &&
-                new Date(p.Session.sessionDate).getTime() === new Date(session.sessionDate).getTime()
+            const conflict = await checkSessionTimeConflict(
+                req.user.id,
+                session.sessionDate,
+                session.id
             );
 
-            if (hasTimeConflict) {
+            if (conflict.hasConflict) {
                 req.flash(
                     "error",
-                    "Conflict detected: You already have another session scheduled at this date and time."
+                    "You cannot join this session because it overlaps with another session you're already participating in."
                 );
 
-                return res.redirect("/dashboard");
+                const referer = req.get("Referrer");
+                return res.redirect(referer || "/dashboard");
             }
 
 
