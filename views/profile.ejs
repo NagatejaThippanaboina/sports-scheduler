@@ -21,65 +21,53 @@
                     </div>
                 </div>
 
-                <% if (messages.error && messages.error.length> 0) { %>
+                <%- include('partials/flash-messages') %>
+
+                <!-- PROFILE INFO CARD -->
+                <div
+                    style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 24px; margin-bottom: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <h3
+                        style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--text-dark);">
+                        Account Information</h3>
                     <div
-                        style="margin-bottom: 20px; padding: 14px 18px; background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 8px; color: #991b1b; font-size: 14px; font-weight: 500;">
-                        <%= messages.error[0] %>
-                    </div>
-                    <% } %>
-
-                        <% if (messages.success && messages.success.length> 0) { %>
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                        <div>
+                            <span
+                                style="font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Full
+                                Name</span>
                             <div
-                                style="margin-bottom: 20px; padding: 14px 18px; background: #f0fdf4; border-left: 4px solid #22c55e; border-radius: 8px; color: #166534; font-size: 14px; font-weight: 500;">
-                                <%= messages.success[0] %>
+                                style="font-size: 16px; font-weight: 600; color: var(--text-dark); margin-top: 4px;">
+                                <%= user.name %>
                             </div>
-                            <% } %>
+                        </div>
+                        <div>
+                            <span
+                                style="font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Email
+                                Address</span>
+                            <div
+                                style="font-size: 16px; font-weight: 600; color: var(--text-dark); margin-top: 4px;">
+                                <%= user.email %>
+                            </div>
+                        </div>
+                        <div>
+                            <span
+                                style="font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Role</span>
+                            <div style="margin-top: 4px;">
+                                <span class="badge"
+                                    style="background: <%= user.role === 'admin' ? '#dbeafe' : '#e0e7ff' %>; color: <%= user.role === 'admin' ? '#1e40af' : '#3730a3' %>; text-transform: capitalize;">
+                                    <%= user.role %>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                <!-- PROFILE INFO CARD -->
-                                <div
-                                    style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 24px; margin-bottom: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                                    <h3
-                                        style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--text-dark);">
-                                        Account Information</h3>
-                                    <div
-                                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-                                        <div>
-                                            <span
-                                                style="font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Full
-                                                Name</span>
-                                            <div
-                                                style="font-size: 16px; font-weight: 600; color: var(--text-dark); margin-top: 4px;">
-                                                <%= user.name %>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span
-                                                style="font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Email
-                                                Address</span>
-                                            <div
-                                                style="font-size: 16px; font-weight: 600; color: var(--text-dark); margin-top: 4px;">
-                                                <%= user.email %>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <span
-                                                style="font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase;">Role</span>
-                                            <div style="margin-top: 4px;">
-                                                <span class="badge"
-                                                    style="background: <%= user.role === 'admin' ? '#dbeafe' : '#e0e7ff' %>; color: <%= user.role === 'admin' ? '#1e40af' : '#3730a3' %>; text-transform: capitalize;">
-                                                    <%= user.role %>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- CHANGE PASSWORD CARD -->
-                                <div
-                                    style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                                    <h3
-                                        style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--text-dark);">
-                                        Change Password</h3>
+                <!-- CHANGE PASSWORD CARD -->
+                <div id="change-password"
+                    style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <h3
+                        style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--text-dark);">
+                        Change Password</h3>
                                     <form action="/profile/change-password" method="POST"
                                         style="display: flex; flex-direction: column; gap: 16px;">
                                         <div>

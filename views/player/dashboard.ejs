@@ -34,54 +34,7 @@
                  FLASH MESSAGES
                  ================================================= -->
 
-                    <% if (successMessages && successMessages.length> 0) { %>
-
-                        <% successMessages.forEach(message=> { %>
-
-                            <div class="player-alert player-alert-success">
-
-                                <div class="player-alert-icon">
-                                    ✓
-                                </div>
-
-                                <div>
-                                    <strong>Success</strong>
-
-                                    <p>
-                                        <%= message %>
-                                    </p>
-                                </div>
-
-                            </div>
-
-                            <% }) %>
-
-                                <% } %>
-
-
-                                    <% if (errorMessages && errorMessages.length> 0) { %>
-
-                                        <% errorMessages.forEach(message=> { %>
-
-                                            <div class="player-alert player-alert-error">
-
-                                                <div class="player-alert-icon">
-                                                    !
-                                                </div>
-
-                                                <div>
-                                                    <strong>Something went wrong</strong>
-
-                                                    <p>
-                                                        <%= message %>
-                                                    </p>
-                                                </div>
-
-                                            </div>
-
-                                            <% }) %>
-
-                                                <% } %>
+                    <%- include('../partials/flash-messages') %>
 
 
                                                     <!-- =================================================

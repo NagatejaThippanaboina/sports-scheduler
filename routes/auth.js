@@ -11,10 +11,7 @@ const router = express.Router();
 // ===============================
 
 router.get("/signup", (req, res) => {
-    res.render("signup", {
-        errorMessages: req.flash("error"),
-        successMessages: req.flash("success"),
-    });
+    res.render("signup");
 });
 
 router.post("/signup", async (req, res) => {
@@ -63,10 +60,7 @@ router.post("/signup", async (req, res) => {
 // ===============================
 
 router.get("/login", (req, res) => {
-    res.render("login", {
-        errorMessages: req.flash("error"),
-        successMessages: req.flash("success"),
-    });
+    res.render("login");
 });
 
 router.post(
@@ -109,7 +103,6 @@ router.post("/logout", (req, res, next) => {
 router.get("/profile", requireAuth, (req, res) => {
     res.render("profile", {
         user: req.user,
-        messages: req.flash(),
     });
 });
 

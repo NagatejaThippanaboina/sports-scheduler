@@ -1,0 +1,23 @@
+<% if (typeof successMessages !== 'undefined' && successMessages && successMessages.length > 0) { %>
+    <% successMessages.forEach(function(msg) { %>
+        <div class="flash-alert flash-alert-success" role="alert">
+            <div class="flash-alert-icon">✓</div>
+            <div class="flash-alert-content">
+                <strong class="flash-alert-title">Success</strong>
+                <p class="flash-alert-message"><%= msg %></p>
+            </div>
+        </div>
+    <% }); %>
+<% } %>
+
+<% if (typeof errorMessages !== 'undefined' && errorMessages && errorMessages.length > 0) { %>
+    <% errorMessages.forEach(function(msg) { %>
+        <div class="flash-alert flash-alert-error" role="alert">
+            <div class="flash-alert-icon">✕</div>
+            <div class="flash-alert-content">
+                <strong class="flash-alert-title">Error</strong>
+                <p class="flash-alert-message"><%= msg %></p>
+            </div>
+        </div>
+    <% }); %>
+<% } %>

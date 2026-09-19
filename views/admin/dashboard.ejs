@@ -61,37 +61,10 @@
 
 
                 <!-- =========================
-         FLASH MESSAGES
-         ========================= -->
+          FLASH MESSAGES
+          ========================= -->
 
-                <% if (successMessages && successMessages.length> 0) { %>
-
-                    <div class="flash-message flash-success">
-
-                        <strong>✓ Success</strong>
-
-                        <span>
-                            <%= successMessages[0] %>
-                        </span>
-
-                    </div>
-
-                    <% } %>
-
-
-                        <% if (errorMessages && errorMessages.length> 0) { %>
-
-                            <div class="flash-message flash-error">
-
-                                <strong>⚠ Error</strong>
-
-                                <span>
-                                    <%= errorMessages[0] %>
-                                </span>
-
-                            </div>
-
-                            <% } %>
+                <%- include('../partials/flash-messages') %>
 
 
                                 <!-- =========================

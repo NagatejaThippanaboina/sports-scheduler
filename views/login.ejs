@@ -61,27 +61,9 @@
 
                     </div>
 
-                    <% if (typeof errorMessages !=='undefined' && errorMessages.length> 0) { %>
-                        <div class="flash-alert flash-error"
-                            style="margin-bottom: 20px; padding: 14px 18px; background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 8px; color: #991b1b; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 10px;">
-                            <span>✕</span>
-                            <span>
-                                <%= errorMessages[0] %>
-                            </span>
-                        </div>
-                        <% } %>
+                    <%- include('partials/flash-messages') %>
 
-                            <% if (typeof successMessages !=='undefined' && successMessages.length> 0) { %>
-                                <div class="flash-alert flash-success"
-                                    style="margin-bottom: 20px; padding: 14px 18px; background: #f0fdf4; border-left: 4px solid #22c55e; border-radius: 8px; color: #166534; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 10px;">
-                                    <span>✓</span>
-                                    <span>
-                                        <%= successMessages[0] %>
-                                    </span>
-                                </div>
-                                <% } %>
-
-                                    <div class="auth-form-card">
+                    <div class="auth-form-card">
 
                                         <form action="/login" method="POST" class="auth-form">
 
