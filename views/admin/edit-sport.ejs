@@ -121,6 +121,10 @@
 
         </section>
 
+        <!-- =========================
+             FLASH MESSAGES
+             ========================= -->
+        <%- include('../partials/flash-messages') %>
 
         <!-- =========================
              EDIT FORM
@@ -212,6 +216,32 @@
 
                 </form>
 
+            </div>
+
+            <!-- DANGER ZONE -->
+            <div class="card" style="margin-top: 24px; border-color: #fecaca; background: #fffafb; padding: 24px; border-radius: var(--radius-md, 14px);">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h3 style="margin: 0; color: var(--danger, #dc2626); font-size: 16px; font-weight: 700;">
+                            Delete Sport
+                        </h3>
+                        <p style="margin: 4px 0 0; color: var(--text-soft, #64748b); font-size: 13px; max-width: 480px;">
+                            Permanently delete this sport from the system. This can only be done if no scheduled or past sessions exist for this sport.
+                        </p>
+                    </div>
+                    <form
+                        action="/admin/sports/<%= sport.id %>/delete"
+                        method="POST"
+                        onsubmit="return confirm('Are you sure you want to delete <%= sport.name %>? This action cannot be undone and will only succeed if 0 sessions use this sport.');"
+                    >
+                        <button
+                            type="submit"
+                            class="btn btn-danger"
+                        >
+                            Delete Sport
+                        </button>
+                    </form>
+                </div>
             </div>
 
         </section>

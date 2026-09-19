@@ -259,19 +259,72 @@ router.post(
 
 
             res.redirect("/admin/dashboard");
-
         } catch (error) {
-
             console.error(error);
-
             req.flash(
                 "error",
                 "We couldn't update the sport. Please try again."
             );
-
             res.redirect("/admin/dashboard");
         }
+    }
+);
 
+
+// =========================================================
+// DELETE SPORT (SAFE DELETION)
+// =========================================================
+
+router.post(
+    "/admin/sports/:id/delete",
+    requireAdmin,
+    async (req, res) => {
+        try {
+            const sport = await Sport.findOne({
+                where: {
+                    id: req.params.id,
+                    createdBy: req.user.id,
+                },
+            });
+
+            if (!sport) {
+                req.flash(
+                    "error",
+                    "Sport not found or you do not have permission to delete it."
+                );
+                return res.redirect("/admin/dashboard");
+            }
+
+            // Check if any sessions exist for this sport
+            const sessionCount = await Session.count({
+                where: {
+                    sportId: req.params.id,
+                },
+            });
+
+            if (sessionCount > 0) {
+                req.flash(
+                    "error",
+                    `Cannot delete "${sport.name}" because ${sessionCount} session(s) depend on it. Cancel or delete those sessions first.`
+                );
+                return res.redirect("/admin/dashboard");
+            }
+
+            await sport.destroy();
+
+            req.flash(
+                "success",
+                `Sport "${sport.name}" was deleted successfully.`
+            );
+            return res.redirect("/admin/dashboard");
+        } catch (error) {
+            console.error(error);
+            req.flash(
+                "error",
+                "We couldn't delete the sport. Please try again."
+            );
+            return res.redirect("/admin/dashboard");
+        }
     }
 );
 
