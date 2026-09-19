@@ -257,11 +257,16 @@
                                                     <td style="padding: 14px 18px;">
                                                         <% if (session.status==="scheduled" ) { %>
                                                             <span class="badge badge-success">Scheduled</span>
-                                                            <% } else if (session.status==="cancelled" ) { %>
-                                                                <span class="badge badge-warning">Cancelled</span>
-                                                                <% } else { %>
-                                                                    <span class="badge badge-success">Completed</span>
-                                                                    <% } %>
+                                                        <% } else if (session.status==="cancelled" ) { %>
+                                                            <span class="badge badge-warning" style="background: #fef3c7; color: #92400e; border: 1px solid #fde68a;">Cancelled</span>
+                                                            <% if (session.cancellationReason) { %>
+                                                                <div style="font-size: 12px; color: var(--text-soft); margin-top: 4px; max-width: 220px; line-height: 1.3;">
+                                                                    <strong>Reason:</strong> <%= session.cancellationReason %>
+                                                                </div>
+                                                            <% } %>
+                                                        <% } else { %>
+                                                            <span class="badge" style="background: #e2e8f0; color: #475569;">Completed</span>
+                                                        <% } %>
                                                     </td>
                                                 </tr>
                                                 <% }); %>
