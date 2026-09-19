@@ -68,6 +68,12 @@
                                         style="font-size: 12px; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;">
                                         <%= user.email %>
                                     </div>
+                                    <div style="margin-top: 6px;">
+                                        <span
+                                            style="display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: <%= user.role === 'admin' ? '#1e40af' : '#3730a3' %>; background: <%= user.role === 'admin' ? '#dbeafe' : '#e0e7ff' %>; padding: 2px 8px; border-radius: 4px;">
+                                            Role: <%= user.role === 'admin' ? 'Administrator' : 'Player' %>
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <!-- PROFILE & SECURITY LINKS -->

@@ -19,69 +19,7 @@
     <!-- =========================
          TOP NAVIGATION
          ========================= -->
-
-    <header class="topbar">
-        <div class="container topbar-inner">
-
-            <a href="/dashboard" class="brand">
-
-                <div class="brand-mark">
-                    S
-                </div>
-
-                <div class="brand-text">
-
-                    <span class="brand-name">
-                        Sports Scheduler
-                    </span>
-
-                    <span class="brand-tagline">
-                        Plan. Play. Connect.
-                    </span>
-
-                </div>
-
-            </a>
-
-
-            <div class="topbar-actions">
-
-                <div class="user-chip">
-
-                    <div class="user-avatar">
-                        <%= user.name.charAt(0).toUpperCase() %>
-                    </div>
-
-                    <span>
-                        <%= user.name %>
-                    </span>
-
-                </div>
-
-
-                <span class="role-badge">
-                    Player
-                </span>
-
-
-                <form
-                    action="/logout"
-                    method="POST"
-                >
-
-                    <button
-                        type="submit"
-                        class="nav-logout"
-                    >
-                        Logout
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
-    </header>
+    <%- include('../partials/header') %>
 
 
     <!-- =========================

@@ -524,14 +524,13 @@ router.post(
 
 
             // -----------------------------------------
-            // ONLY CREATOR CAN CANCEL
+            // ONLY CREATOR OR ADMIN CAN CANCEL
             // -----------------------------------------
 
-            if (session.createdBy !== req.user.id) {
-
+            if (session.createdBy !== req.user.id && req.user.role !== "admin") {
                 req.flash(
                     "error",
-                    "You can only cancel sessions created by you."
+                    "You do not have permission to cancel this session."
                 );
 
                 return res.redirect(

@@ -16,67 +16,7 @@
     <!-- =========================
          TOP NAVIGATION
          ========================= -->
-
-    <header class="topbar">
-
-        <div class="container topbar-inner">
-
-            <a href="/admin/dashboard" class="brand">
-
-                <div class="brand-mark">
-                    S
-                </div>
-
-                <div class="brand-text">
-
-                    <span class="brand-name">
-                        Sports Scheduler
-                    </span>
-
-                    <span class="brand-subtitle">
-                        Admin Console
-                    </span>
-
-                </div>
-
-            </a>
-
-
-            <div class="nav-actions">
-
-                <div class="user-chip">
-
-                    <div class="user-avatar">
-                        <%= user ? user.name.charAt(0).toUpperCase() : "A" %>
-                    </div>
-
-                    <span>
-                        <%= user ? user.name : "Sports Admin" %>
-                    </span>
-
-                </div>
-
-
-                <form
-                    action="/logout"
-                    method="POST"
-                    class="logout-form"
-                >
-
-                    <button
-                        type="submit"
-                        class="logout-button"
-                    >
-                        Logout
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
-
-    </header>
+    <%- include('../partials/header') %>
 
 
     <!-- =========================

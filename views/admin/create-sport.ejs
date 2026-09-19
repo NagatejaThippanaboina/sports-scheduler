@@ -16,51 +16,15 @@
     <!-- =========================
          NAVIGATION
          ========================= -->
-
-    <header class="topbar">
-
-        <div class="container topbar-inner">
-
-            <a
-                href="/admin/dashboard"
-                class="brand"
-            >
-
-                <div class="brand-mark">
-                    S
-                </div>
-
-                <div class="brand-text">
-
-                    <span class="brand-name">
-                        Sports Scheduler
-                    </span>
-
-                    <span class="brand-subtitle">
-                        Admin Console
-                    </span>
-
-                </div>
-
-            </a>
-
-            <a
-                href="/admin/dashboard"
-                class="btn btn-secondary btn-small"
-            >
-                &larr; Dashboard
-            </a>
-
-        </div>
-
-    </header>
-
+    <%- include('../partials/header') %>
 
     <!-- =========================
          FORM
          ========================= -->
 
     <main class="container form-page">
+
+        <%- include('../partials/flash-messages') %>
 
         <div class="form-card">
 

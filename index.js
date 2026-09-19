@@ -46,6 +46,11 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use((req, res, next) => {
+    res.locals.user = req.user || null;
+    next();
+});
+
 app.get("/", async (req, res) => {
     try {
         const upcomingSessions = await Session.findAll({
