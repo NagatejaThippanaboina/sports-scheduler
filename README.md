@@ -648,7 +648,7 @@ Administrators can analyse sessions over a configurable period and view session 
 
 ### Project Demo
 
-**Video Demo:** `PASTE YOUR YOUTUBE / LOOM LINK HERE`
+**Video Demo:** https://youtu.be/gFE19CMl6CU?si=AZ5DXmUKbvMQYPDx
 
 The final demonstration video will show the working application and explain the major 501 concepts used to build it.
 
