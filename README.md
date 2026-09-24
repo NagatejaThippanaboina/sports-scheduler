@@ -4,21 +4,23 @@
 
 A full-stack sports session management platform built as the final capstone project for the **501 Web Development course**.
 
-**Sports Scheduler** allows administrators to manage sports and view reports, while players can create, discover, join, and manage sports sessions.
+**Sports Scheduler** allows administrators to manage available sports and view reports, while players can create, discover, join, and manage sports sessions.
 
 It is designed for **college communities, sports clubs, teams, friends, and recreational groups** that need a simple way to organize games and find players.
 
-### 🌐 Live Application
+---
+
+## 🌐 Live Application
 
 **https://sports-scheduler-hiur.onrender.com/**
 
-### 💻 GitHub Repository
+## 💻 GitHub Repository
 
 **https://github.com/NagatejaThippanaboina/sports-scheduler**
 
 ---
 
-## 📌 Project Overview
+# 📌 Project Overview
 
 Sports Scheduler provides a centralized platform for organizing sports sessions instead of coordinating everything manually.
 
@@ -27,7 +29,7 @@ The application supports two main user roles:
 * **Administrator** — manages sports, creates and participates in sessions, and views reports.
 * **Player** — creates sessions, discovers available games, joins sessions, and manages their own sessions.
 
-The project applies the backend, database, authentication, testing, security, frontend templating, and deployment concepts covered throughout the **501 course**.
+The project applies the backend, database, authentication, testing, security, frontend templating, and deployment concepts covered throughout the **501 Web Development course**.
 
 ---
 
@@ -35,15 +37,15 @@ The project applies the backend, database, authentication, testing, security, fr
 
 ## 👨‍💼 Administrator Features
 
-### Sports Management
+### 🏟️ Sports Management
 
 Administrators can:
 
-* View available sports.
-* Create new sports.
-* Edit sports.
-* Delete sports when they have no dependent sessions.
-* Manage the sports available to players.
+* View available sports
+* Create new sports
+* Edit sports
+* Delete sports when they have no dependent sessions
+* Manage the sports available to players
 
 The application currently supports sports including:
 
@@ -63,26 +65,26 @@ The application currently supports sports including:
 * Swimming
 * Athletics
 
-### Admin Session Management
+### 🎮 Admin Session Management
 
 Administrators can also use the application as players.
 
 They can:
 
-* Create sport sessions.
-* Select a sport.
-* Set the date and time.
-* Specify a venue.
-* Add players to teams.
-* Specify additional players required.
-* Join sessions.
-* View session details.
-* Cancel sessions.
-* Switch between **Admin Console** and **Player Mode**.
+* Create sport sessions
+* Select a sport
+* Set the date and time
+* Specify a venue
+* Add players to teams
+* Specify additional players required
+* Join sessions
+* View session details
+* Cancel sessions
+* Switch between **Admin Console** and **Player Mode**
 
 ### 📊 Reports
 
-Administrators can view session reports for a configurable time period, including:
+Administrators can view reports for a configurable time period, including:
 
 * Total sessions
 * Scheduled sessions
@@ -104,17 +106,25 @@ New players can register using:
 * Email address
 * Password
 
-Passwords are stored securely using **bcrypt hashing**.
+Passwords are securely stored using **bcrypt hashing**.
 
 ## 🔑 Sign In
 
-Existing users can sign in using their email and password.
+Existing users can sign in using their email address and password.
 
 Authentication is implemented using **Passport.js** with session-based authentication.
 
 ## 🚪 Sign Out
 
-Authenticated users can sign out and have their session cleared.
+Authenticated users can sign out and have their authentication session cleared.
+
+## 🔄 Change Password
+
+Authenticated users can change their own password.
+
+The password is re-hashed using **bcrypt** before being stored.
+
+Password changes are available to authenticated users without exposing or modifying another user's credentials.
 
 ## 🏟️ Create a Sport Session
 
@@ -207,7 +217,7 @@ Conflict validation is applied when sessions are created and when users join ses
 
 # 🔐 Authentication & Security
 
-The project implements security concepts covered in the 501 course:
+The project implements several security concepts covered in the 501 course:
 
 * Passport.js authentication
 * bcrypt password hashing
@@ -235,13 +245,13 @@ Messages are used for:
 * Warnings
 * Information
 
-They are integrated into authentication, registration, session creation, joining, cancellation, and other workflows.
+They are integrated into authentication, registration, session creation, joining, cancellation, password changes, and other workflows.
 
 ---
 
 # 🎓 501 Course Concepts Applied
 
-Sports Scheduler was developed as the final capstone project for the **501 course**.
+Sports Scheduler was developed as the final capstone project for the **501 Web Development course**.
 
 The course concepts were originally demonstrated through a Todo application. For the capstone, those concepts were applied to a complete sports-management application.
 
@@ -286,7 +296,7 @@ This project therefore extends the learning from the 501 Todo application into a
 
 Sports Scheduler uses **PostgreSQL** with **Sequelize**.
 
-The production database is hosted using **Neon PostgreSQL**, while the web application itself is deployed on **Render**.
+The production database is hosted using **Neon PostgreSQL**, while the web application is deployed on **Render**.
 
 ### Main relationships
 
@@ -368,7 +378,7 @@ Connects users with sessions and stores:
 * User ID
 * Created/updated timestamps
 
-This allows users to participate in multiple sessions while keeping participation records separate from the main session data.
+This allows participation records to be maintained separately from the main session data.
 
 ---
 
@@ -482,6 +492,7 @@ Create a `.env` file:
 
 ```env
 PORT=3000
+
 NODE_ENV=development
 
 POSTGRES_USER=postgres
@@ -526,26 +537,28 @@ The application is deployed as a live production application on **Render**.
 
 ### Live Application
 
-👉 **https://sports-scheduler-hiur.onrender.com/**
+**https://sports-scheduler-hiur.onrender.com/**
 
 ### Production Database
 
 The deployed application uses **Neon PostgreSQL** as its production database.
 
-This separation allows:
+The production architecture is:
 
 ```text
 Users
-   │
-   ▼
+  │
+  ▼
 Render
-   │
-   ▼
+  │
+  ▼
 Sports Scheduler
-   │
-   ▼
+  │
+  ▼
 Neon PostgreSQL
 ```
+
+Render hosts the web application while Neon provides the production PostgreSQL database.
 
 The production environment supports the same authentication, sports, sessions, participation, cancellation, and reporting workflows as the local application.
 
@@ -656,11 +669,15 @@ The demonstration will cover:
 13. Cancelling a session
 14. Session statuses
 15. Reports and sport popularity
-16. PostgreSQL and Sequelize
-17. Authentication and security
-18. Testing
-19. Git/GitHub workflow
-20. Render deployment and Neon PostgreSQL
+16. Password management
+17. PostgreSQL and Sequelize
+18. Authentication and security
+19. Testing
+20. Git/GitHub workflow
+21. Render deployment
+22. Neon PostgreSQL production database
+
+> **Note:** Replace the placeholder above with the final YouTube, Loom, or Vimeo URL after the demonstration video has been uploaded.
 
 ---
 
@@ -668,7 +685,7 @@ The demonstration will cover:
 
 Sports Scheduler was developed to satisfy the major requirements of the final 501 capstone.
 
-### Completion
+## Completion
 
 The application provides:
 
@@ -684,15 +701,19 @@ The application provides:
 * Cancellation reasons
 * Session status management
 * Administrative reports
+* Password management
+* Live cloud deployment
 
-### Demo Quality
+## Demo Quality
 
 The project demonstrates both:
 
 * The working Sports Scheduler application
 * The underlying 501 web-development concepts used to build it
 
-### Code Quality
+The demonstration video presents the application's major workflows and explains the technical concepts behind the implementation.
+
+## Code Quality
 
 The application uses:
 
@@ -706,13 +727,14 @@ The application uses:
 * Automated tests
 * Git/GitHub version control
 
-### Feature Quality
+## Feature Quality
 
 The application provides:
 
 * Separate admin and player experiences
 * Admin Player Mode
 * Authentication
+* Password management
 * Session management
 * Participant management
 * Cancellation handling
@@ -760,14 +782,6 @@ Possible future improvements include:
 
 B.Tech — Computer Science and Engineering
 Vishnu Institute of Technology, Bhimavaram
-
----
-
-# 📜 License
-
-This project is distributed under the **ISC License**.
-
-See the `LICENSE` file for details.
 
 ---
 
